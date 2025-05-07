@@ -14,7 +14,7 @@ interface User {
 export const handler: Handlers<{ users: User[] }> = {
   async GET(_, ctx) {
     try {
-      const resp = await axios.get<User[]>("http://localhost:8080/users/all");
+      const resp = { data: [{ id: 1, name: "John Doe", email: "john.doe@example.com" }] };
       return ctx.render({ users: resp.data });
     } catch {
       return ctx.render({ users: [] });

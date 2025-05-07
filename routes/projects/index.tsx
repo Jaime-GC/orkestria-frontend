@@ -9,7 +9,7 @@ export const handler: Handlers<{ projects: Project[] }> = {
     // Simulación de datos de proyectos
     const projects: Project[] = [
       { id: "1", name: "Project Alpha", status: "In Progress" },
-      { id: "2", name: "Project Beta", status: "Completed" },
+      { id: "2", name: "Project Beta", status: "Done" },
       { id: "3", name: "Project Gamma", status: "Not Started" },
     ];
     return ctx.render({ projects });
@@ -40,7 +40,8 @@ export default function ProjectsList({ data }: PageProps<{ projects: Project[] }
             {projects.map((p) => (
               <Card
                 key={p.id}
-                class="bg-gray-100 rounded-xl shadow-[3px_3px_6px_#d1d9e6,-2px_-2px_6px_#ffffff] transition-all hover:shadow-[inset_3px_3px_6px_#d1d9e6,inset_-2px_-2px_6px_#ffffff] hover:bg-gray-200"
+                class="
+                bg-gray-100 rounded-xl shadow-[3px_3px_6px_#d1d9e6,-2px_-2px_6px_#ffffff] transition-all hover:shadow-[inset_3px_3px_6px_#d1d9e6,inset_-2px_-2px_6px_#ffffff] hover:bg-gray-200"
               >
                 <a href={`/projects/${p.id}`} class="block p-4">
                   <h2 class="text-lg font-semibold text-navy">{p.name}</h2>

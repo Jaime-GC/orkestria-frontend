@@ -40,9 +40,8 @@ export function IconUsers(props: h.JSX.SVGAttributes<SVGSVGElement>) {
 export function IconResources(props: h.JSX.SVGAttributes<SVGSVGElement>) {
   return (
     <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor">
-      <path d="M4 4h16v16H4z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-      <path d="M9 4v16M15 4v16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-      <path d="M4 9h16M4 15h16" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M3 3h18v18H3z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+      <path d="M9 3v18M15 3v18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
     </svg>
   );
 }
