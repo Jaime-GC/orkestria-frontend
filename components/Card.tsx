@@ -8,7 +8,7 @@ export interface CardProps {
 
 export function Card({ class: _class = "", children }: CardProps) {
   return (
-    <div class={`bg-gray-100 rounded-xl shadow-inner p-6 neumorphic ${_class}`}>
+    <div class={`rounded-xl p-6 ${_class}`}>
       {children}
     </div>
   );

@@ -13,20 +13,26 @@ export default function Home(_props: PageProps) {
           Simplifica tu flujo de trabajo y colabora con tu equipo en un entorno moderno y atractivo.
         </p>
         <div class="w-full max-w-lg">
-          <svg
+            <svg
             class="w-full h-auto"
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 500 150"
             preserveAspectRatio="none"
-          >
+            >
+            <defs>
+              <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style={{ stopColor: "#6a11cb", stopOpacity: 1 }} />
+              <stop offset="100%" style={{ stopColor: "#2575fc", stopOpacity: 1 }} />
+              </linearGradient>
+            </defs>
             <path
-              d="M0,100 C150,200 350,0 500,100 L500,00 L0,0 Z"
-              style={{ fill: "#d1d9e6", opacity: 0.8 }}
+              d="M0,50 C150,150 350,0 500,100 L500,00 L0,0 Z"
+              style={{ fill: "url(#gradient)", opacity: 0.9 }}
             />
-          </svg>
+            </svg>
         </div>
         <footer class="absolute bottom-4 text-sm text-navy">
-          Orkestria Company
+          Orkestria Company&reg;
         </footer>
       </main>
     </div>
