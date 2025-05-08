@@ -1,6 +1,5 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
 import Sidebar from "../islands/Sidebar.tsx";
-import axios from "npm:axios";
 import { NewUserModal } from "../islands/Buttons/NewUserModal.tsx";
 import { DeleteButton } from "../islands/Buttons/DeleteButton.tsx";
 import { EditItemModal } from "../islands/Buttons/EditItemModal.tsx";
@@ -12,13 +11,13 @@ interface User {
 }
 
 export const handler: Handlers<{ users: User[] }> = {
-  async GET(_, ctx) {
-    try {
-      const resp = { data: [{ id: 1, name: "John Doe", email: "john.doe@example.com" }] };
-      return ctx.render({ users: resp.data });
-    } catch {
-      return ctx.render({ users: [] });
-    }
+  GET(_, ctx) {
+    const users: User[] = [
+      { id: 1, name: "Alice", email: "alice@example.com" },
+      { id: 2, name: "Bob", email: "bob@example.com" },
+      { id: 3, name: "Carol", email: "carol@example.com" },
+    ];
+    return ctx.render({ users });
   },
 };
 

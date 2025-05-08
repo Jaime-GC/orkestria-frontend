@@ -9,6 +9,10 @@ import * as $notifications from "./routes/notifications.tsx";
 import * as $projects_id_ from "./routes/projects/[id].tsx";
 import * as $projects_index from "./routes/projects/index.tsx";
 import * as $resources from "./routes/resources.tsx";
+import * as $resources_index from "./routes/resources/index.tsx";
+import * as $resources_inventory from "./routes/resources/inventory.tsx";
+import * as $resources_reservations from "./routes/resources/reservations.tsx";
+import * as $resources_schedules from "./routes/resources/schedules.tsx";
 import * as $users from "./routes/users.tsx";
 import * as $Buttons_DeleteButton from "./islands/Buttons/DeleteButton.tsx";
 import * as $Buttons_EditItemModal from "./islands/Buttons/EditItemModal.tsx";
@@ -26,6 +30,10 @@ const manifest = {
     "./routes/projects/[id].tsx": $projects_id_,
     "./routes/projects/index.tsx": $projects_index,
     "./routes/resources.tsx": $resources,
+    "./routes/resources/index.tsx": $resources_index,
+    "./routes/resources/inventory.tsx": $resources_inventory,
+    "./routes/resources/reservations.tsx": $resources_reservations,
+    "./routes/resources/schedules.tsx": $resources_schedules,
     "./routes/users.tsx": $users,
   },
   islands: {

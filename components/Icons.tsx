@@ -54,3 +54,38 @@ export function IconBell(props: h.JSX.SVGAttributes<SVGSVGElement>) {
     </svg>
   );
 }
+
+
+
+// Icons of Resources
+export function InventoryIcon(props: h.JSX.SVGAttributes<SVGSVGElement>) {
+  return (
+    <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M3 9h18M9 21V9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  );
+}
+
+export function ScheduleIcon(props: h.JSX.SVGAttributes<SVGSVGElement>) {
+  return (
+    <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <rect x="3" y="4" width="18" height="18" rx="2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M16 2v4M8 2v4M3 10h18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  );
+}
+
+export function ReservationIcon(props: h.JSX.SVGAttributes<SVGSVGElement>) {
+  return (
+    <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      {/* Libro abierto */}
+      <path d="M4 19.5V4.5a.5.5 0 0 1 .65-.48L12 6l7.35-1.98a.5.5 0 0 1 .65.48v15a.5.5 0 0 1-.65.48L12 18l-7.35 1.98a.5.5 0 0 1-.65-.48z" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      {/* Páginas */}
+      <line x1="12" y1="6" x2="12" y2="18" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      <line x1="7" y1="9" x2="17" y2="9" stroke-width="1" stroke-linecap="round"/>
+      <line x1="7" y1="12" x2="17" y2="12" stroke-width="1" stroke-linecap="round"/>
+      <line x1="7" y1="15" x2="17" y2="15" stroke-width="1" stroke-linecap="round"/>
+    </svg>
+  );
+}
