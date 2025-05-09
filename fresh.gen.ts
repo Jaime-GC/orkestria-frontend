@@ -8,16 +8,21 @@ import * as $index from "./routes/index.tsx";
 import * as $notifications from "./routes/notifications.tsx";
 import * as $projects_id_ from "./routes/projects/[id].tsx";
 import * as $projects_index from "./routes/projects/index.tsx";
-import * as $resources from "./routes/resources.tsx";
 import * as $resources_index from "./routes/resources/index.tsx";
 import * as $resources_inventory from "./routes/resources/inventory.tsx";
 import * as $resources_reservations from "./routes/resources/reservations.tsx";
 import * as $resources_schedules from "./routes/resources/schedules.tsx";
 import * as $users from "./routes/users.tsx";
+import * as $BoxTree from "./islands/BoxTree.tsx";
+import * as $Buttons_CreateNodeModal from "./islands/Buttons/CreateNodeModal.tsx";
 import * as $Buttons_DeleteButton from "./islands/Buttons/DeleteButton.tsx";
+import * as $Buttons_DeleteNodeModal from "./islands/Buttons/DeleteNodeModal.tsx";
 import * as $Buttons_EditItemModal from "./islands/Buttons/EditItemModal.tsx";
+import * as $Buttons_EditNodeModal from "./islands/Buttons/EditNodeModal.tsx";
 import * as $Buttons_NewUserModal from "./islands/Buttons/NewUserModal.tsx";
+import * as $Buttons_OptionsButton from "./islands/Buttons/OptionsButton.tsx";
 import * as $Kanban from "./islands/Kanban.tsx";
+import * as $ResourceInventory from "./islands/ResourceInventory.tsx";
 import * as $Sidebar from "./islands/Sidebar.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
@@ -29,7 +34,6 @@ const manifest = {
     "./routes/notifications.tsx": $notifications,
     "./routes/projects/[id].tsx": $projects_id_,
     "./routes/projects/index.tsx": $projects_index,
-    "./routes/resources.tsx": $resources,
     "./routes/resources/index.tsx": $resources_index,
     "./routes/resources/inventory.tsx": $resources_inventory,
     "./routes/resources/reservations.tsx": $resources_reservations,
@@ -37,10 +41,16 @@ const manifest = {
     "./routes/users.tsx": $users,
   },
   islands: {
+    "./islands/BoxTree.tsx": $BoxTree,
+    "./islands/Buttons/CreateNodeModal.tsx": $Buttons_CreateNodeModal,
     "./islands/Buttons/DeleteButton.tsx": $Buttons_DeleteButton,
+    "./islands/Buttons/DeleteNodeModal.tsx": $Buttons_DeleteNodeModal,
     "./islands/Buttons/EditItemModal.tsx": $Buttons_EditItemModal,
+    "./islands/Buttons/EditNodeModal.tsx": $Buttons_EditNodeModal,
     "./islands/Buttons/NewUserModal.tsx": $Buttons_NewUserModal,
+    "./islands/Buttons/OptionsButton.tsx": $Buttons_OptionsButton,
     "./islands/Kanban.tsx": $Kanban,
+    "./islands/ResourceInventory.tsx": $ResourceInventory,
     "./islands/Sidebar.tsx": $Sidebar,
   },
   baseUrl: import.meta.url,

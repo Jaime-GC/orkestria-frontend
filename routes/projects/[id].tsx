@@ -1,4 +1,5 @@
 import { Handlers, PageProps } from "$fresh/server.ts";
+import { Head } from "$fresh/runtime.ts";
 import Kanban from "../../islands/Kanban.tsx";
 import Sidebar from "../../islands/Sidebar.tsx";
 
@@ -22,17 +23,21 @@ export const handler: Handlers<{ tasks: Task[] }> = {
   },
 };
 
-export default function ProjectDetail({ data }: PageProps<{ tasks: Task[] }>) {
+export default function ProjectDetail({ data, params }: PageProps<{ tasks: Task[] }>) {
   return (
-    <div class="flex h-screen font-sans bg-gray-100">
-      {/* Sidebar */}
-      <Sidebar />
+    <>
+      <Head>
+        <title>Orkestria - Proyecto #{params.id}</title>
+        <link rel="stylesheet" href="/static/styles.css" />
+      </Head>
+      <div class="flex h-screen font-sans bg-gray-100">
+        <Sidebar />
 
-      {/* Main Content */}
-      <main class="w-3/4 p-4">
-        <h1 class="text-2xl font-bold mb-4">Kanban Board</h1>
-        <Kanban tasks={data.tasks} />
-      </main>
-    </div>
+        <main class="w-3/4 p-4">
+          <h1 class="text-2xl font-bold mb-4">Kanban Board</h1>
+          <Kanban tasks={data.tasks} />
+        </main>
+      </div>
+    </>
   );
 }

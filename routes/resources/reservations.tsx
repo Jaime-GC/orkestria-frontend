@@ -23,7 +23,7 @@ export default function Reservations({ data }: { data: { data: Reservation[] } }
   return (
     <>
       <Head>
-        <title>Reservas - Orkestria</title>
+        <title>Reservas de clientes- Orkestria</title>
         <link rel="stylesheet" href="/static/styles.css" />
       </Head>
       <div class="flex h-screen bg-gray-100">

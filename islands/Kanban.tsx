@@ -3,7 +3,7 @@ import { useState } from "preact/hooks";
 interface Task { id: string; title: string; status: string; }
 
 export default function Kanban({ tasks }: { tasks: Task[] }) {
-  const [cols, setCols] = useState<Record<string, Task>>({
+  const [cols, setCols] = useState<Record<string, Task[]>>({
     "To Do": tasks.filter(t => t.status === "todo"),
     "In Progress": tasks.filter(t => t.status === "inprogress"),
     "Blocked": tasks.filter(t => t.status === "blocked"),

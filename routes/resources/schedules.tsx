@@ -4,7 +4,7 @@ import Sidebar from "../../islands/Sidebar.tsx";
 import CalendarTable, { Schedule } from "../../components/CalendarTable.tsx";
 
 export const handler = {
-  GET(_, ctx) {
+  async GET(_: Request, ctx: { render: (data: unknown) => Response }) {
     const data: Schedule[] = [
       { date: "2024-07-01", shift: "Morning" },
       { date: "2024-07-01", shift: "Evening" },
@@ -18,7 +18,7 @@ export default function Schedules({ data }: { data: { data: Schedule[] } }) {
   return (
     <>
       <Head>
-        <title>Horarios - Orkestria</title>
+        <title>Horarios de empleados - Orkestria</title>
         <link rel="stylesheet" href="/static/styles.css" />
       </Head>
       <div class="flex h-screen bg-gray-100">
