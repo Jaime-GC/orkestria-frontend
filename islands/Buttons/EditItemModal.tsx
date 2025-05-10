@@ -1,64 +1,118 @@
 import { useState } from "preact/hooks";
-import { updateResource } from "../../components/api.ts";
 import { EditIcon } from "../../components/Icons.tsx";
 
-interface EditItemModalProps<T> {
+interface EditItemModalProps {
   resource: string;
-  item: T & { id: number };
-  fields: (keyof T)[];
+  item: Record<string, any>;
+  fields: string[];
   onSuccess?: () => void;
 }
 
-export const EditItemModal = <T extends {}>(
-  { resource, item, fields, onSuccess }: EditItemModalProps<T>,
-) => {
-  const [open, setOpen] = useState(false);
-  const [form, setForm] = useState({ ...item } as any);
+export function EditItemModal(
+  { resource, item, fields, onSuccess }: EditItemModalProps,
+) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [formData, setFormData] = useState<Record<string, any>>({ ...item });
+  const [error, setError] = useState<string | null>(null);
+  const [isSaving, setIsSaving] = useState(false);
 
-  async function handleSubmit(e: Event) {
+  const handleInput = (e: Event) => {
+    const target = e.target as HTMLInputElement;
+    setFormData({ ...formData, [target.name]: target.value });
+  };
+
+  const handleSubmit = async (e: Event) => {
     e.preventDefault();
-    await updateResource(resource, item.id, form);
-    setOpen(false);
-    if (onSuccess) onSuccess();
-    else window.location.reload();
-  }
+    setIsSaving(true);
+    setError(null);
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/${resource}/${item.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(formData),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
+      }
+
+      setIsOpen(false);
+      if (onSuccess) onSuccess();
+    } catch (err) {
+      console.error(`Error updating ${resource}:`, err);
+      setError(
+        `No se pudo actualizar el ${resource}. Por favor, intente nuevamente.`,
+      );
+    } finally {
+      setIsSaving(false);
+    }
+  };
 
   return (
     <>
-      <button onClick={() => setOpen(true)} class="p-1 hover:bg-gray-200 rounded-full">
-        <EditIcon/>
+      <button
+        onClick={() => setIsOpen(true)}
+        class="p-1 hover:bg-gray-200 rounded-full"
+      >
+        <EditIcon />
       </button>
-      {open && (
+
+      {isOpen && (
         <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div class="bg-gray-100 rounded-2xl p-6 w-80">
-            <h2 class="text-xl font-semibold text-navy mb-4">Edit {resource}</h2>
+            <h2 class="text-xl font-semibold text-navy mb-4">
+              Edit {resource.slice(0, -1)}
+            </h2>
+
+            {error && (
+              <div class="bg-red-100 text-red-700 p-3 rounded mb-4">
+                {error}
+              </div>
+            )}
 
             <form onSubmit={handleSubmit} class="space-y-3">
-              {fields.map((key) => (
-                <div>
-                  <label class="block text-sm mb-1">{String(key)}</label>
+              {fields.map((field) => (
+                <div key={field} class="mb-4">
+                  <label class="block text-gray-700 mb-1">
+                    {field.charAt(0).toUpperCase() + field.slice(1)}
+                  </label>
                   <input
                     type="text"
-                    value={form[key]}
-                    onInput={(e: any) => setForm({ ...form, [key]: e.target.value })}
-                    class="w-full px-3 py-2 border rounded"
+                    name={field}
+                    value={formData[field] || ""}
+                    onInput={handleInput}
+                    class="w-full px-3 py-2 border border-gray-300 rounded"
                   />
                 </div>
               ))}
 
-              <div class="flex justify-end space-x-2">
-                <button type="button" onClick={() => setOpen(false)} class="px-4 py-2 bg-gray-200 rounded">
+              <div class="flex justify-end gap-2 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setIsOpen(false)}
+                  class="px-4 py-2 border border-gray-300 rounded"
+                  disabled={isSaving}
+                >
                   Cancel
                 </button>
-                <button type="submit" class="px-4 py-2 bg-navy text-white rounded">
-                  Save
+                <button
+                  type="submit"
+                  class="px-4 py-2 bg-navy text-white rounded"
+                  disabled={isSaving}
+                >
+                  {isSaving ? "Saving..." : "Save"}
                 </button>
               </div>
-              
             </form>
           </div>
         </div>
       )}
     </>
   );
-};
+}

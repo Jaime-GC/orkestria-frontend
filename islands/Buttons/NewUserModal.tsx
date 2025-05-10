@@ -1,6 +1,6 @@
 import { useState } from "preact/hooks";
-import { FunctionalComponent } from "preact";
-import axios from "npm:axios";
+import type { User } from "../../components/types.ts";
+import { FunctionalComponent } from "preact/src/index.d.ts";
 
 export interface NewUserModalProps {
     onSuccess?: () => void;
@@ -8,18 +8,51 @@ export interface NewUserModalProps {
 
 export const NewUserModal: FunctionalComponent<NewUserModalProps> = ({ onSuccess }) => {
     const [open, setOpen] = useState(false);
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
+    const [formData, setFormData] = useState<Partial<User>>({
+        name: "",
+        email: "",
+        username: "",
+        role: "EMPLOYEE"
+    });
+    const [error, setError] = useState<string | null>(null);
+    const [loading, setLoading] = useState(false);
+
+    const handleInput = (e: Event) => {
+        const target = e.target as HTMLInputElement;
+        setFormData({ ...formData, [target.name]: target.value });
+    };
 
     async function handleSubmit(e: Event) {
         e.preventDefault();
+        setLoading(true);
+        setError(null);
+
         try {
-            await axios.post("http://localhost:8080/users/create", { name, email });
+            const response = await fetch('http://localhost:8080/api/users', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            });
+            
+            if (!response.ok) {
+                throw new Error(`Error ${response.status}: ${response.statusText}`);
+            }
+            
             setOpen(false);
-            onSuccess ? onSuccess() : window.location.reload();
+            setFormData({
+                name: "",
+                email: "",
+                username: "",
+                role: "EMPLOYEE"
+            });
+            if (onSuccess) onSuccess();
         } catch (err) {
             console.error("Error creating user:", err);
-            alert(`Fallo al crear usuario: ${err}`);
+            setError("No se pudo crear el usuario. Por favor, intente nuevamente.");
+        } finally {
+            setLoading(false);
         }
     }
 
@@ -45,8 +78,9 @@ export const NewUserModal: FunctionalComponent<NewUserModalProps> = ({ onSuccess
                                 <label class="block text-sm text-navy mb-1">Name</label>
                                 <input
                                     type="text"
-                                    value={name}
-                                    onInput={(e) => setName(e.currentTarget.value)}
+                                    name="name"
+                                    value={formData.name}
+                                    onInput={handleInput}
                                     required
                                     class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring"
                                 />
@@ -56,12 +90,19 @@ export const NewUserModal: FunctionalComponent<NewUserModalProps> = ({ onSuccess
                                 <label class="block text-sm text-navy mb-1">Email</label>
                                 <input
                                     type="email"
-                                    value={email}
-                                    onInput={(e) => setEmail(e.currentTarget.value)}
+                                    name="email"
+                                    value={formData.email}
+                                    onInput={handleInput}
                                     required
                                     class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring"
                                 />
                             </div>
+
+                            {error && (
+                                <div class="text-red-500 text-sm mt-2">
+                                    {error}
+                                </div>
+                            )}
 
                             <div class="flex justify-end space-x-2 mt-4">
                                 <button
@@ -74,7 +115,9 @@ export const NewUserModal: FunctionalComponent<NewUserModalProps> = ({ onSuccess
                                 <button
                                     type="submit"
                                     class="px-4 py-2 rounded-lg bg-navy text-white hover:bg-blue-900 transition"
-                                >Save
+                                    disabled={loading}
+                                >
+                                    {loading ? "Saving..." : "Save"}
                                 </button>
                             </div>
 

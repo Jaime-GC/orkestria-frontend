@@ -37,7 +37,12 @@ export function BoxTree({
     <div class={`${gridClass} ${level > 0 ? 'ml-6 mt-3 border-l-2 border-gray-200 pl-3' : ''}`}>
       {items.map(item => {
         // Determine if this node can have children (by default, all nodes can unless type is explicitly 'item')
-        const canHaveChildren = item.type !== 'item';
+        let canHaveChildren;
+        if (!item.type || item.type === 'group') {
+          canHaveChildren = true;
+        } else {
+          canHaveChildren = false;
+        }
         
         return (
           <div 

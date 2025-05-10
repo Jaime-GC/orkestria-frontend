@@ -19,9 +19,11 @@ import * as $Buttons_DeleteButton from "./islands/Buttons/DeleteButton.tsx";
 import * as $Buttons_DeleteNodeModal from "./islands/Buttons/DeleteNodeModal.tsx";
 import * as $Buttons_EditItemModal from "./islands/Buttons/EditItemModal.tsx";
 import * as $Buttons_EditNodeModal from "./islands/Buttons/EditNodeModal.tsx";
+import * as $Buttons_NewProjectModal from "./islands/Buttons/NewProjectModal.tsx";
 import * as $Buttons_NewUserModal from "./islands/Buttons/NewUserModal.tsx";
 import * as $Buttons_OptionsButton from "./islands/Buttons/OptionsButton.tsx";
 import * as $Kanban from "./islands/Kanban.tsx";
+import * as $ProjectsList from "./islands/ProjectsList.tsx";
 import * as $ResourceInventory from "./islands/ResourceInventory.tsx";
 import * as $Sidebar from "./islands/Sidebar.tsx";
 import type { Manifest } from "$fresh/server.ts";
@@ -47,9 +49,11 @@ const manifest = {
     "./islands/Buttons/DeleteNodeModal.tsx": $Buttons_DeleteNodeModal,
     "./islands/Buttons/EditItemModal.tsx": $Buttons_EditItemModal,
     "./islands/Buttons/EditNodeModal.tsx": $Buttons_EditNodeModal,
+    "./islands/Buttons/NewProjectModal.tsx": $Buttons_NewProjectModal,
     "./islands/Buttons/NewUserModal.tsx": $Buttons_NewUserModal,
     "./islands/Buttons/OptionsButton.tsx": $Buttons_OptionsButton,
     "./islands/Kanban.tsx": $Kanban,
+    "./islands/ProjectsList.tsx": $ProjectsList,
     "./islands/ResourceInventory.tsx": $ResourceInventory,
     "./islands/Sidebar.tsx": $Sidebar,
   },

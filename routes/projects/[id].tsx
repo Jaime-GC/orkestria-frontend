@@ -2,40 +2,79 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import { Head } from "$fresh/runtime.ts";
 import Kanban from "../../islands/Kanban.tsx";
 import Sidebar from "../../islands/Sidebar.tsx";
+import type { Project, Task } from "../../components/types.ts";
 
-interface Task { id: string; title: string; status: string; }
+interface ProjectDetailData {
+  project: Project;
+  tasks: Task[];
+  error?: string;
+}
 
-export const handler: Handlers<{ tasks: Task[] }> = {
+export const handler: Handlers<ProjectDetailData> = {
   async GET(_, ctx) {
     const { id } = ctx.params;
-    const res = new Response(JSON.stringify([
-      { id: "1", title: "Task 1", status: "todo" },
-      { id: "2", title: "Task 2", status: "inprogress" },
-      { id: "3", title: "Task 3", status: "done" },
-      { id: "4", title: "Task 4", status: "blocked" },
-      { id: "5", title: "Task 5", status: "todo" },
-      { id: "6", title: "Task 6", status: "inprogress" },
-      { id: "7", title: "Task 7", status: "done" },
-      { id: "8", title: "Task 8", status: "blocked" },
-    ]));
-    const tasks: Task[] = await res.json();
-    return ctx.render({ tasks });
+    try {
+      const [projectResponse, tasksResponse] = await Promise.all([
+        fetch(`http://localhost:8080/api/projects/${id}`),
+        fetch(`http://localhost:8080/api/projects/${id}/tasks`)
+      ]);
+      
+      if (!projectResponse.ok || !tasksResponse.ok) {
+        throw new Error(`Error en la petición: ${!projectResponse.ok ? projectResponse.status : tasksResponse.status}`);
+      }
+      
+      const project = await projectResponse.json();
+      const tasks = await tasksResponse.json();
+      
+      return ctx.render({ 
+        project, 
+        tasks 
+      });
+    } catch (error) {
+      console.error(`Error loading project ${id}:`, error);
+      return ctx.render({ 
+        project: { id, name: "Error", description: "No se pudo cargar el proyecto" }, 
+        tasks: [], 
+        error: "No se pudo cargar el proyecto y sus tareas"
+      });
+    }
   },
 };
 
-export default function ProjectDetail({ data, params }: PageProps<{ tasks: Task[] }>) {
+export default function ProjectDetail({ data }: PageProps<ProjectDetailData>) {
+  const { project, tasks, error } = data;
+
   return (
     <>
       <Head>
-        <title>Orkestria - Proyecto #{params.id}</title>
-        <link rel="stylesheet" href="/static/styles.css" />
+        <title>Orkestria - Proyecto: {project.name}</title>
       </Head>
       <div class="flex h-screen font-sans bg-gray-100">
         <Sidebar />
-
-        <main class="w-3/4 p-4">
-          <h1 class="text-2xl font-bold mb-4">Kanban Board</h1>
-          <Kanban tasks={data.tasks} />
+        
+        <main class="flex-1 p-8 overflow-auto">
+          {error ? (
+            <div class="bg-red-100 text-red-700 p-4 rounded-lg mb-6">{error}</div>
+          ) : (
+            <>
+              <div class="mb-8">
+                <h1 class="text-2xl font-bold text-navy">{project.name}</h1>
+                {project.description && (
+                  <p class="mt-2 text-gray-600">{project.description}</p>
+                )}
+              </div>
+              
+              <h2 class="text-xl font-semibold text-navy mb-4">Tareas</h2>
+              
+              {tasks.length > 0 ? (
+                <Kanban tasks={tasks} />
+              ) : (
+                <div class="bg-gray-100 rounded-xl p-6 shadow-[3px_3px_6px_#d1d9e6,-2px_-2px_6px_#ffffff] text-center">
+                  <p class="text-gray-500">No hay tareas para este proyecto</p>
+                </div>
+              )}
+            </>
+          )}
         </main>
       </div>
     </>

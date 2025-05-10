@@ -1,69 +1,53 @@
-import { h } from "preact";
 import { Head } from "$fresh/runtime.ts";
+import { Handlers, PageProps } from "$fresh/server.ts";
 import Sidebar from "../../islands/Sidebar.tsx";
 import ResourceInventory from "../../islands/ResourceInventory.tsx";
-import { BoxNode } from "../../islands/BoxTree.tsx";
+import type { ResourceGroup } from "../../components/types.ts";
 
-export const handler = {
-  GET(_: Request, ctx: { render: (data: unknown) => Response }) {
-    const items: BoxNode[] = [
-      {
-        id: "1",
-        name: "Equipo Informático",
-        children: [
-          {
-            id: "1.1",
-            name: "Portátiles",
-            children: [
-              { id: "1.1.1", name: "Dell XPS" },
-              { id: "1.1.2", name: "MacBook Pro" },
-              { id: "1.1.3", name: "ThinkPad X1" },
-            ],
-          },
-          {
-            id: "1.2",
-            name: "Monitores",
-            children: [
-              { id: "1.2.1", name: "Dell 27\"" },
-              { id: "1.2.2", name: "LG Ultrawide" },
-            ],
-          },
-          { id: "1.3", name: "Periféricos" },
-        ],
-      },
-      {
-        id: "2",
-        name: "Mobiliario",
-        children: [
-          { id: "2.1", name: "Mesas" },
-          { id: "2.2", name: "Sillas" },
-          { id: "2.3", name: "Archivadores" },
-        ],
-      },
-      {
-        id: "3",
-        name: "Material de Oficina",
-        children: [
-          { id: "3.1", name: "Papelería" },
-          { id: "3.2", name: "Artículos de escritura" },
-        ],
-      },
-    ];
-    return ctx.render({ items });
+interface InventoryData {
+  groups: ResourceGroup[];
+  error?: string;
+}
+
+export const handler: Handlers<InventoryData> = {
+  async GET(_, ctx) {
+    try {
+      const response = await fetch("http://localhost:8080/api/resource-groups");
+      
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      return ctx.render({ groups: data });
+    } catch (error) {
+      console.error("Error loading resource groups:", error);
+      return ctx.render({
+        groups: [],
+        error: "No se pudieron cargar los grupos de recursos.",
+      });
+    }
   },
 };
 
-export default function Inventory({ data }: { data: { items: BoxNode[] } }) {
+export default function InventoryPage({ data }: PageProps<InventoryData>) {
+  const { groups, error } = data;
+
   return (
     <>
       <Head>
-        <title>Inventario - Orkestria</title>
-        <link rel="stylesheet" href="/static/styles.css" />
+        <title>Orkestria - Inventario</title>
       </Head>
-      <div class="flex h-screen bg-gray-100">
+      <div class="flex h-screen bg-gray-100 font-sans">
         <Sidebar />
         <main class="flex-1 p-8 overflow-auto">
-          <ResourceInventory initialItems={data.items} />
+          <h1 class="text-2xl font-bold text-navy mb-6">Inventario</h1>
+
+          {error && (
+            <div class="bg-red-100 text-red-700 p-4 rounded-lg mb-6">{error}</div>
+          )}
+
+          <ResourceInventory initialItems={groups} />
         </main>
       </div>
     </>

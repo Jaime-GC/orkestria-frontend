@@ -6,7 +6,6 @@ export default function Notifications() {
     <>
       <Head>
         <title>Orkestria - Notificaciones</title>
-        <link rel="stylesheet" href="/static/styles.css" />
       </Head>
       <div class="flex h-screen font-sans bg-gray-100">
         <Sidebar />
