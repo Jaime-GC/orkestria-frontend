@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .sidebar-item {
+    @apply bg-white rounded-xl shadow-[3px_3px_6px_#d1d9e6,-2px_-2px_6px_#ffffff] px-5 py-3 text-navy font-medium text-lg transition-all;
+  }
+
+  .sidebar-item:hover {
+    @apply shadow-[inset_3px_3px_6px_#d1d9e6,inset_-2px_-2px_6px_#ffffff];
+  }
+
+  .sidebar-item-active {
+    @apply bg-gray-200 shadow-[inset_3px_3px_6px_#d1d9e6,inset_-2px_-2px_6px_#ffffff];
+  }
+}
+
+/* Scrollbar personalizado */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background-color: #e7ecef;
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #c9d3df;
+  border-radius: 10px;
+  box-shadow: inset 2px 2px 4px rgba(255, 255, 255, 0.5), inset -2px -2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: #b3bfcc;
+}

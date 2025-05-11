@@ -1,0 +1,46 @@
+export interface Project {
+  id: string;
+  name: string;
+  description?: string;
+  startDate?: string;
+  status?: string;
+}
+
+export interface Task {
+    id: string;
+    title: string;
+    description?: string;
+    priority: 'LOW' | 'MEDIUM' | 'HIGH';
+    type: 'URGENT' | 'RECURRING' | 'OTHER';
+    status: 'TODO' | 'DOING' | 'BLOCKED' | 'DONE';
+    projectId: string;
+}
+
+export interface User {
+  id: string;
+  username: string;
+  email: string;
+  role: 'EMPLOYEE' | 'CLIENT';
+}
+
+export interface ResourceGroup {
+  id: number;
+  name: string;
+  parentId?: number;
+}
+
+
+export interface Schedule {
+  id: string;
+  username: string;
+  startDateTime: string;
+  endDateTime: string;
+}
+
+export interface Reservation {
+  id: string;
+  resourceGroup: ResourceGroup;
+  startDateTime: string;
+  endDateTime: string;
+  reservedBy: string;
+}
