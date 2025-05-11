@@ -21,6 +21,8 @@ import * as $Buttons_EditItemModal from "./islands/Buttons/EditItemModal.tsx";
 import * as $Buttons_EditNodeModal from "./islands/Buttons/EditNodeModal.tsx";
 import * as $Buttons_NewGroupButton from "./islands/Buttons/NewGroupButton.tsx";
 import * as $Buttons_NewProjectModal from "./islands/Buttons/NewProjectModal.tsx";
+import * as $Buttons_NewReservationModal from "./islands/Buttons/NewReservationModal.tsx";
+import * as $Buttons_NewScheduleModal from "./islands/Buttons/NewScheduleModal.tsx";
 import * as $Buttons_NewTaskModal from "./islands/Buttons/NewTaskModal.tsx";
 import * as $Buttons_NewUserModal from "./islands/Buttons/NewUserModal.tsx";
 import * as $Buttons_OptionsButton from "./islands/Buttons/OptionsButton.tsx";
@@ -53,6 +55,8 @@ const manifest = {
     "./islands/Buttons/EditNodeModal.tsx": $Buttons_EditNodeModal,
     "./islands/Buttons/NewGroupButton.tsx": $Buttons_NewGroupButton,
     "./islands/Buttons/NewProjectModal.tsx": $Buttons_NewProjectModal,
+    "./islands/Buttons/NewReservationModal.tsx": $Buttons_NewReservationModal,
+    "./islands/Buttons/NewScheduleModal.tsx": $Buttons_NewScheduleModal,
     "./islands/Buttons/NewTaskModal.tsx": $Buttons_NewTaskModal,
     "./islands/Buttons/NewUserModal.tsx": $Buttons_NewUserModal,
     "./islands/Buttons/OptionsButton.tsx": $Buttons_OptionsButton,

@@ -2,6 +2,7 @@ import { Head } from "$fresh/runtime.ts";
 import { Handlers, PageProps } from "$fresh/server.ts";
 import Sidebar from "../../islands/Sidebar.tsx";
 import type { Reservation } from "../../components/types.ts";
+import { NewReservationModal } from "../../islands/Buttons/NewReservationModal.tsx";
 
 interface ReservationsData {
   reservations: Reservation[];
@@ -9,7 +10,7 @@ interface ReservationsData {
 }
 
 export const handler: Handlers<ReservationsData> = {
-  async GET(_, ctx) {
+  async GET(req, ctx) {
     try {
       const response = await fetch("http://localhost:8080/api/reservations");
       
@@ -17,13 +18,16 @@ export const handler: Handlers<ReservationsData> = {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
       
-      const data = await response.json();
-      return ctx.render({ reservations: data });
+      const reservations = await response.json();
+      return ctx.render({
+        reservations,
+        error: undefined
+      });
     } catch (error) {
       console.error("Error loading reservations:", error);
       return ctx.render({
         reservations: [],
-        error: "No se pudieron cargar las reservas.",
+        error: "No se pudieron cargar las reservas."
       });
     }
   },
@@ -40,7 +44,15 @@ export default function Reservations({ data }: PageProps<ReservationsData>) {
       <div class="flex h-screen font-sans bg-gray-100">
         <Sidebar />
         <main class="flex-1 p-8 overflow-auto">
-          <h1 class="text-2xl font-bold text-navy mb-6">Reservas</h1>
+          {/* Encabezado con título y botones */}
+          <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold text-navy">Reservas</h1>
+            <div class="flex space-x-2">
+              <NewReservationModal
+                onSuccess={() => window.location.reload()}
+              />
+            </div>
+          </div>
           
           {error && <div class="bg-red-100 text-red-700 p-4 rounded-lg mb-6">{error}</div>}
           
