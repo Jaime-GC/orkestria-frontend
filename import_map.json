@@ -1,0 +1,6 @@
+{
+  "imports": {
+    "@toast-ui/calendar": "https://esm.sh/@toast-ui/calendar@2.1.3",
+    "@toast-ui/calendar/": "https://esm.sh/@toast-ui/calendar@2.1.3/"
+  }
+}

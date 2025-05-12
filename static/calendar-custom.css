@@ -1,0 +1,34 @@
+/* Custom styles for Toast UI Calendar */
+.toastui-calendar-layout {
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.toastui-calendar-day-name-item {
+  font-weight: 600;
+}
+
+.toastui-calendar-time-schedule {
+  border-radius: 4px;
+}
+
+.toastui-calendar-weekday-grid-line {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.toastui-calendar-weekend {
+  background-color: #f7fafc;
+}
+
+.toastui-calendar-today {
+  background-color: rgba(66, 153, 225, 0.05);
+}
+
+/* Custom styles for better calendar appearance */
+.calendar-container {
+  background-color: white;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1rem;
+}

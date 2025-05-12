@@ -29,16 +29,26 @@ export function NewReservationModal({ onSuccess }: NewReservationModalProps) {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch(
+       // Ensure dates are properly formatted as ISO strings
+      const payload = {
+        ...formData,
+        startDateTime: new Date(formData.startDateTime).toISOString(),
+        endDateTime: new Date(formData.endDateTime).toISOString(),
+      };
+      
+      const response = await fetch(
         `http://localhost:8080/api/resource-groups/${formData.groupId}/reservations`,
-        { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(formData) }
+        { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload) }
       )
-      if (!res.ok) throw new Error(`Error ${res.status}`)
+      if (!response.ok) {
+        throw new Error(`Error ${response.status}: ${response.statusText}`)
+      }
       setOpen(false)
       setFormData({ groupId: "", startDateTime: "", endDateTime: "", reservedBy: "" })
       onSuccess ? onSuccess() : window.location.reload()
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Error creando reserva")
+      console.error("Error creating reservation:", err)
+      setError("No se pudo crear la reserva. Por favor, intente nuevamente.")
     } finally {
       setLoading(false)
     }

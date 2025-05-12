@@ -48,63 +48,80 @@ export function NewScheduleModal({ onSuccess }: NewScheduleModalProps) {
     <>
       <button
         onClick={() => setOpen(true)}
-        className="bg-blue-100 rounded-xl px-4 py-2 text-blue-700 font-medium shadow hover:bg-blue-200 transition"
+        class="bg-gray-100 rounded-xl px-4 py-2 text-navy font-medium shadow-[3px_3px_6px_#d1d9e6,-2px_-2px_6px_#ffffff] hover:shadow-[inset_3px_3px_6px_#d1d9e6,inset_-2px_-2px_6px_#ffffff] flex items-center gap-2 transition-all"
       >
-        + Nuevo Evento
+        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        Nuevo Evento
       </button>
 
       {open && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded p-6 w-full max-w-md">
-            <h2 className="text-xl font-semibold mb-4">Crear Evento</h2>
-            {error && <div className="text-red-600 mb-2">{error}</div>}
-            <form onSubmit={handleSubmit} className="space-y-4">
+        <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div class="bg-gray-100 rounded-xl shadow-[5px_5px_10px_#d1d9e6,-5px_-5px_10px_#ffffff] p-6 w-full max-w-md">
+            <div class="flex justify-between items-center mb-4">
+              <h2 class="text-xl font-semibold text-navy">Crear Evento</h2>
+              <button 
+                onClick={() => setOpen(false)}
+                class="text-gray-500 hover:text-gray-700"
+              >
+                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            {error && (
+              <div class="bg-red-100 text-red-700 p-3 rounded-lg mb-4">
+                {error}
+              </div>
+            )}
+            <form onSubmit={handleSubmit} class="space-y-4">
               <div>
-                <label className="block mb-1">Usuario</label>
+                <label class="block mb-1">Usuario</label>
                 <input
                   type="text"
                   name="username"
                   value={formData.username}
                   onChange={handleInput}
                   required
-                  className="w-full border px-2 py-1 rounded"
+                  class="w-full border px-2 py-1 rounded"
                 />
               </div>
               <div>
-                <label className="block mb-1">Inicio</label>
+                <label class="block mb-1">Inicio</label>
                 <input
                   type="datetime-local"
                   name="startDateTime"
                   value={formData.startDateTime}
                   onChange={handleInput}
                   required
-                  className="w-full border px-2 py-1 rounded"
+                  class="w-full border px-2 py-1 rounded"
                 />
               </div>
               <div>
-                <label className="block mb-1">Fin</label>
+                <label class="block mb-1">Fin</label>
                 <input
                   type="datetime-local"
                   name="endDateTime"
                   value={formData.endDateTime}
                   onChange={handleInput}
                   required
-                  className="w-full border px-2 py-1 rounded"
+                  class="w-full border px-2 py-1 rounded"
                 />
               </div>
-              <div className="flex justify-end space-x-2">
+              <div class="flex justify-end space-x-2">
                 <button
                   type="button"
                   onClick={() => setOpen(false)}
                   disabled={loading}
-                  className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
+                  class="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300"
                 >
                   Cancelar
                 </button>
                 <button
                   type="submit"
                   disabled={loading}
-                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-2"
+                  class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-2"
                 >
                   {loading ? "Guardando..." : "Guardar"}
                 </button>

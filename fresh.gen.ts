@@ -10,6 +10,7 @@ import * as $projects_id_ from "./routes/projects/[id].tsx";
 import * as $projects_index from "./routes/projects/index.tsx";
 import * as $resources_index from "./routes/resources/index.tsx";
 import * as $resources_inventory from "./routes/resources/inventory.tsx";
+import * as $resources_reservations_calendar from "./routes/resources/reservations-calendar.tsx";
 import * as $resources_reservations from "./routes/resources/reservations.tsx";
 import * as $resources_schedules from "./routes/resources/schedules.tsx";
 import * as $users from "./routes/users.tsx";
@@ -30,6 +31,7 @@ import * as $Kanban from "./islands/Kanban.tsx";
 import * as $ProjectsList from "./islands/ProjectsList.tsx";
 import * as $ResourceInventory from "./islands/ResourceInventory.tsx";
 import * as $Sidebar from "./islands/Sidebar.tsx";
+import * as $TuiCalendarIsland from "./islands/TuiCalendarIsland.tsx";
 import type { Manifest } from "$fresh/server.ts";
 
 const manifest = {
@@ -42,6 +44,8 @@ const manifest = {
     "./routes/projects/index.tsx": $projects_index,
     "./routes/resources/index.tsx": $resources_index,
     "./routes/resources/inventory.tsx": $resources_inventory,
+    "./routes/resources/reservations-calendar.tsx":
+      $resources_reservations_calendar,
     "./routes/resources/reservations.tsx": $resources_reservations,
     "./routes/resources/schedules.tsx": $resources_schedules,
     "./routes/users.tsx": $users,
@@ -64,6 +68,7 @@ const manifest = {
     "./islands/ProjectsList.tsx": $ProjectsList,
     "./islands/ResourceInventory.tsx": $ResourceInventory,
     "./islands/Sidebar.tsx": $Sidebar,
+    "./islands/TuiCalendarIsland.tsx": $TuiCalendarIsland,
   },
   baseUrl: import.meta.url,
 } satisfies Manifest;
