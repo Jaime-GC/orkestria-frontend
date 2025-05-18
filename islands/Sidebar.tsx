@@ -4,6 +4,7 @@ import { useEffect, useState } from "preact/hooks";
 const items = [
   { href: "/",        label: "Dashboard", icon: DashboardIcon },
   { href: "/projects", label: "Proyectos", icon: IconProjects },
+  { href: "/tasks",    label: "Tareas",    icon: IconProjects },
   { href: "/users",    label: "Usuarios",  icon: IconUsers },
   { href: "/resources",label: "Recursos",  icon: IconResources },
   { href: "/notifications", label: "Notificaciones", icon: IconBell },

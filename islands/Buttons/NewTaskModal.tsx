@@ -2,7 +2,7 @@ import { useState } from "preact/hooks";
 import type { Task } from "../../components/types.ts";
 
 export interface NewTaskModalProps {
-    projectId: string;
+    projectId: string | null;
     onSuccess?: () => void;
 }
 
@@ -14,7 +14,7 @@ export function NewTaskModal({ projectId, onSuccess }: NewTaskModalProps) {
         status: "TODO",
         priority: "MEDIUM",
         type: "OTHER",
-        projectId: projectId
+        projectId: projectId ?? undefined
     });
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
@@ -24,34 +24,51 @@ export function NewTaskModal({ projectId, onSuccess }: NewTaskModalProps) {
         setFormData({ ...formData, [target.name]: target.value });
     };
 
-    async function handleSubmit(e: Event) {
+    const handleSubmit = async (e: Event) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
-
+        
         try {
-            const response = await fetch(`http://localhost:8080/api/projects/${projectId}/tasks`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(formData)
+            // Crear objeto de datos limpio para enviar
+            const taskData = { ...formData };
+            
+            // Solo incluir projectId si tiene valor
+            if (projectId) {
+                taskData.projectId = projectId;
+            }
+            
+            // Log para depuración
+            console.log("Sending task data:", taskData);
+            
+            const url = projectId
+                ? `http://localhost:8080/api/projects/${projectId}/tasks`
+                : `http://localhost:8080/api/tasks`;
+            
+            const res = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(taskData)
             });
             
-            if (!response.ok) {
-                throw new Error(`Error ${response.status}: ${response.statusText}`);
+            if (!res.ok) {
+                throw new Error(`Error ${res.status}: ${res.statusText}`);
             }
             
             setOpen(false);
-            setFormData({
-                title: "",
-                description: "",
-                status: "todo"
-            });
-            if (onSuccess) onSuccess();
+            setFormData({ title: "", description: "", status: "TODO" });
+            
+            // Recargar la página automáticamente después de crear la tarea
+            if (onSuccess) {
+                onSuccess();
+            } else {
+                setTimeout(() => {
+                    window.location.reload();
+                }, 100); // Pequeño retraso para asegurar que el modal se cierra correctamente
+            }
         } catch (err) {
             console.error("Error creating task:", err);
-            setError("No se pudo crear la tarea. Por favor, intente nuevamente.");
+            setError(`Error al crear la tarea: ${err.message || "Error desconocido"}`);
         } finally {
             setLoading(false);
         }
