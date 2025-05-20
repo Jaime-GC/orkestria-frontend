@@ -13,7 +13,7 @@ export default function ResourcesIndex() {
             <div class="flex h-screen bg-gray-100 font-sans">
                 <Sidebar />
                 <main class="flex-1 p-8 overflow-auto">
-                    <h1 class="text-3xl font-bold text-navy mb-6">Recursos</h1>
+                    <h1 class="text-2xl font-bold text-navy mb-6">Recursos</h1>
                     <div class="grid grid-cols-3 gap-6">
                         <a
                             href="/resources/inventory"

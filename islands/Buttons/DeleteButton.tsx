@@ -53,11 +53,13 @@ export function DeleteButton({ resource, id, onSuccess }: DeleteButtonProps) {
 
       {isModalOpen && (
         <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div class="bg-gray-100 rounded-2xl p-6 w-80">
+          <div class="bg-gray-100 rounded-2xl p-6 max-w-md w-full">
             <h2 class="text-xl font-semibold text-navy mb-4">
               Confirmar eliminación
             </h2>
-            <p class="mb-6">¿Está seguro de que desea eliminar este elemento?</p>
+            <p class="mb-6 break-words whitespace-normal">
+              ¿Está seguro de que desea eliminar este elemento?
+            </p>
 
             {error && (
               <div class="bg-red-100 text-red-700 p-3 rounded mb-4">

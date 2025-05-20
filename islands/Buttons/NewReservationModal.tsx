@@ -24,7 +24,8 @@ export function NewReservationModal({ onSuccess }: NewReservationModalProps) {
       fetch("http://localhost:8080/api/resource-groups")
         .then(response => response.json())
         .then(data => {
-          setResourceGroups(data.filter((group: any) => group.isReservable));
+          console.log("Resource groups fetched:", data); // Add this logging
+          setResourceGroups(data);
         })
         .catch(err => {
           console.error("Error fetching resource groups:", err);

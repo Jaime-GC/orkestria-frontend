@@ -39,7 +39,10 @@ export default function Home(_props: PageProps) {
               </svg>
           </div>
           <footer class="absolute bottom-4 text-sm text-navy">
-            Orkestria Company&reg;
+            Orkestria Company&reg; 
+            <div class="text-xs mt-2">
+              Jaime Gonzalez Carbajo
+            </div>
           </footer>
         </main>
       </div>

@@ -25,7 +25,7 @@ export const handler: Handlers<ReservationsCalendarData> = {
       const events: TuiEvent[] = reservations.map((reservation) => ({
         id: String(reservation.id),
         calendarId: "2", // Using calendar ID defined in TuiCalendarIsland for reservations
-        title: `${reservation.resourceGroup.name}: ${'Sin título'}`,
+        title: `${reservation.resourceGroup.name}: ${reservation.title || 'Sin título'}`,
         category: "time",
         start: reservation.startDateTime,
         end: reservation.endDateTime,

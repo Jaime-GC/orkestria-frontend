@@ -3,6 +3,8 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import Sidebar from "../../islands/Sidebar.tsx";
 import type { Schedule } from "../../components/types.ts";
 import { NewScheduleModal } from "../../islands/Buttons/NewScheduleModal.tsx";
+import { EditItemModal } from "../../islands/Buttons/EditItemModal.tsx";
+import { DeleteButton } from "../../islands/Buttons/DeleteButton.tsx";
 
 interface SchedulesData {
   schedules: Schedule[];
@@ -68,19 +70,37 @@ export default function Schedules({ data }: PageProps<SchedulesData>) {
                 <thead>
                   <tr class="border-b border-gray-300">
                     <th class="py-3 px-4 text-left">Usuario</th>
+                    <th class="py-3 px-4 text-left">Título</th>
                     <th class="py-3 px-4 text-left">Inicio</th>
                     <th class="py-3 px-4 text-left">Fin</th>
+                    <th class="py-3 px-4 text-left">Acciones</th>
                   </tr>
                 </thead>
                 <tbody>
                   {schedules.map((schedule) => (
                     <tr key={schedule.id} class="border-b border-gray-200">
                       <td class="py-3 px-4">{schedule.username}</td>
+                      <td class="py-3 px-4">{schedule.title}</td>
                       <td class="py-3 px-4">
                         {new Date(schedule.startDateTime).toLocaleString()}
                       </td>
                       <td class="py-3 px-4">
                         {new Date(schedule.endDateTime).toLocaleString()}
+                      </td>
+                      <td class="py-3 px-4">
+                        <div class="flex space-x-2">
+                          <EditItemModal
+                            resource="employee-schedules"
+                            item={schedule}
+                            fields={["username", "title", "startDateTime", "endDateTime"]}
+                            onSuccess={() => window.location.reload()}
+                          />
+                          <DeleteButton
+                            resource="employee-schedules"
+                            id={String(schedule.id)}
+                            onSuccess={() => window.location.reload()}
+                          />
+                        </div>
                       </td>
                     </tr>
                   ))}

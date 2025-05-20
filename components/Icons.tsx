@@ -10,8 +10,6 @@ export const DeleteIcon = () => (
   </svg>
 );
 
-
-
 // Icons of Sidebar
 import { h } from "preact";
 
@@ -20,6 +18,17 @@ export const DashboardIcon = () => (
         <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
     </svg>
 );
+
+// New TasksIcon with a larger checkmark and thicker square
+export function TasksIcon(props: h.JSX.SVGAttributes<SVGSVGElement>) {
+  return (
+    <svg {...props} viewBox="0 0 24 24" fill="none" stroke="currentColor">
+      <rect x="3" y="3" width="18" height="18" rx="2" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M8 12l3 3 5-5" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 
 export function IconProjects(props: h.JSX.SVGAttributes<SVGSVGElement>) {
   return (

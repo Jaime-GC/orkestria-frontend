@@ -10,6 +10,7 @@ export function NewScheduleModal({ onSuccess }: NewScheduleModalProps) {
   const [open, setOpen] = useState(false)
   const [formData, setFormData] = useState<Partial<Schedule>>({
     username: "",
+    title: "",
     startDateTime: "",
     endDateTime: ""
   })
@@ -35,7 +36,7 @@ export function NewScheduleModal({ onSuccess }: NewScheduleModalProps) {
       })
       if (!res.ok) throw new Error(`Error ${res.status}`)
       setOpen(false)
-      setFormData({ username: "", startDateTime: "", endDateTime: "" })
+      setFormData({ username: "", title: "", startDateTime: "", endDateTime: "" })
       onSuccess ? onSuccess() : window.location.reload()
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error creando evento")
@@ -82,6 +83,17 @@ export function NewScheduleModal({ onSuccess }: NewScheduleModalProps) {
                   type="text"
                   name="username"
                   value={formData.username}
+                  onChange={handleInput}
+                  required
+                  class="w-full border px-2 py-1 rounded"
+                />
+              </div>
+              <div>
+                <label class="block mb-1">Título</label>
+                <input
+                  type="text"
+                  name="title"
+                  value={formData.title || ""}
                   onChange={handleInput}
                   required
                   class="w-full border px-2 py-1 rounded"

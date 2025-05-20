@@ -33,6 +33,7 @@ export interface ResourceGroup {
 export interface Schedule {
   id: string;
   username: string;
+  title: string;
   startDateTime: string;
   endDateTime: string;
 }

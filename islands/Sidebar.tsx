@@ -1,10 +1,10 @@
-import { DashboardIcon, IconBell, IconProjects, IconResources, IconUsers } from "../components/Icons.tsx";
+import { DashboardIcon, IconBell, IconProjects, IconResources, IconUsers, TasksIcon } from "../components/Icons.tsx";
 import { useEffect, useState } from "preact/hooks";
 
 const items = [
   { href: "/",        label: "Dashboard", icon: DashboardIcon },
   { href: "/projects", label: "Proyectos", icon: IconProjects },
-  { href: "/tasks",    label: "Tareas",    icon: IconProjects },
+  { href: "/tasks",    label: "Tareas",    icon: TasksIcon },
   { href: "/users",    label: "Usuarios",  icon: IconUsers },
   { href: "/resources",label: "Recursos",  icon: IconResources },
   { href: "/notifications", label: "Notificaciones", icon: IconBell },
