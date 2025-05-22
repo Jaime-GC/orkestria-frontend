@@ -1,11 +1,7 @@
 import { h } from "preact";
 import { useState, useEffect } from "preact/hooks";
 
-interface NewReservationModalProps {
-  onSuccess?: () => void;
-}
-
-export function NewReservationModal({ onSuccess }: NewReservationModalProps) {
+export function NewReservationModal({ onCreate }: { onCreate: (data: any) => void }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -17,6 +13,8 @@ export function NewReservationModal({ onSuccess }: NewReservationModalProps) {
     endDateTime: "",
     reservedBy: ""
   });
+  const [username, setUsername] = useState("");
+  const [users, setUsers] = useState<any[]>([]);
 
   // Fetch resource groups
   useEffect(() => {
@@ -34,6 +32,14 @@ export function NewReservationModal({ onSuccess }: NewReservationModalProps) {
     }
   }, [open]);
 
+  // Cargar los usuarios al montar el componente
+  useEffect(() => {
+    fetch("http://localhost:8080/api/users")
+      .then(res => res.json())
+      .then(data => setUsers(data))
+      .catch(err => console.error("Error al obtener usuarios:", err));
+  }, []);
+
   function handleInput(e: Event) {
     const target = e.target as HTMLInputElement;
     setFormData({
@@ -48,10 +54,11 @@ export function NewReservationModal({ onSuccess }: NewReservationModalProps) {
     setError(null);
 
     try {
-           const payload = {
+      const payload = {
         ...formData,
         startDateTime: formData.startDateTime,
-        endDateTime: formData.endDateTime
+        endDateTime: formData.endDateTime,
+        reservedBy: formData.reservedBy ? formData.reservedBy : null,
       };
       
       const response = await fetch(`http://localhost:8080/api/resource-groups/${formData.resourceGroupId}/reservations`, {
@@ -69,8 +76,8 @@ export function NewReservationModal({ onSuccess }: NewReservationModalProps) {
       setOpen(false);
       resetForm();
 
-      if (onSuccess) {
-        onSuccess();
+      if (onCreate) {
+        onCreate(payload);
       } else {
         window.location.reload();
       }
@@ -90,6 +97,7 @@ export function NewReservationModal({ onSuccess }: NewReservationModalProps) {
       endDateTime: "",
       reservedBy: ""
     });
+    setUsername("");
     setError(null);
   }
 
@@ -179,17 +187,22 @@ export function NewReservationModal({ onSuccess }: NewReservationModalProps) {
                 />
               </div>
               
-              <div>
-                <label class="block mb-1">Cliente</label>
-                <input
-                  type="text"
-                  name="reservedBy"
-                  value={formData.reservedBy || ""}
-                  onChange={handleInput}
-                  required
-                  class="w-full bg-gray-100 border-none rounded-xl px-4 py-2 shadow-[inset_3px_3px_6px_#d1d9e6,inset_-2px_-2px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
+
+                <div>
+                  <label class="block mb-1 text-navy font-medium">Cliente</label>
+                  <select 
+                    name="reservedBy"
+                    value={formData.reservedBy}
+                    onChange={handleInput}
+                    required
+                    class="w-full bg-gray-100 border-none rounded-xl px-4 py-2 shadow-[inset_3px_3px_6px_#d1d9e6,inset_-2px_-2px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Seleccione un cliente</option>
+                    {users.map(u => (
+                      <option key={u.id} value={u.username}>{u.username}</option>
+                    ))}
+                  </select>
+                </div>
               
               <div class="flex justify-end space-x-3 mt-6">
                 <button
@@ -205,7 +218,7 @@ export function NewReservationModal({ onSuccess }: NewReservationModalProps) {
                 <button
                   type="submit"
                   disabled={loading}
-                  class="bg-blue-600 rounded-xl px-4 py-2 text-white font-medium shadow-[3px_3px_6px_rgba(0,0,0,0.2)] hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+                  class="bg-navy rounded-xl px-4 py-2 text-white font-medium shadow-[3px_3px_6px_rgba(0,0,0,0.2)] hover:bg-blue-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
                 >
                   {loading ? (
                     <svg class="animate-spin h-5 w-5 mr-2" viewBox="0 0 24 24">

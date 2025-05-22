@@ -34,6 +34,7 @@ import * as $Notifications_NotificationToggle from "./islands/Notifications/Noti
 import * as $Notifications_NotificationsClient from "./islands/Notifications/NotificationsClient.tsx";
 import * as $ProjectsList from "./islands/ProjectsList.tsx";
 import * as $ResourceInventory from "./islands/ResourceInventory.tsx";
+import * as $ResourceSelect from "./islands/ResourceSelect.tsx";
 import * as $Sidebar from "./islands/Sidebar.tsx";
 import * as $TasksList from "./islands/TasksList.tsx";
 import * as $TuiCalendarIsland from "./islands/TuiCalendarIsland.tsx";
@@ -79,6 +80,7 @@ const manifest = {
       $Notifications_NotificationsClient,
     "./islands/ProjectsList.tsx": $ProjectsList,
     "./islands/ResourceInventory.tsx": $ResourceInventory,
+    "./islands/ResourceSelect.tsx": $ResourceSelect,
     "./islands/Sidebar.tsx": $Sidebar,
     "./islands/TasksList.tsx": $TasksList,
     "./islands/TuiCalendarIsland.tsx": $TuiCalendarIsland,

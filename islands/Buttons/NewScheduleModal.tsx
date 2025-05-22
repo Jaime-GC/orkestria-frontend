@@ -1,6 +1,7 @@
-import { useState } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
 import { JSX } from "preact";
 import type { Schedule } from "../../components/types.ts";
+import ResourceSelect from "../ResourceSelect.tsx";
 
 export interface NewScheduleModalProps {
   onSuccess?: () => void
@@ -16,11 +17,29 @@ export function NewScheduleModal({ onSuccess }: NewScheduleModalProps) {
   })
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
+  const [reservedBy, setReservedBy] = useState("");
+  const [users, setUsers] = useState<any[]>([]);
+
+  // Cargar los usuarios al montar el componente
+  useEffect(() => {
+    fetch("http://localhost:8080/api/users")
+      .then(res => res.json())
+      .then(data => setUsers(data))
+      .catch(err => console.error("Error al obtener usuarios:", err));
+  }, []);
 
   const handleInput = (e: JSX.TargetedEvent<HTMLInputElement, Event>) => {
     if (e.target) {
       const target = e.target as HTMLInputElement;
       setFormData({ ...formData, [target.name]: target.value });
+    }
+  }
+
+  // Añadir un manejador específico para el cambio del select de empleado
+  const handleReservedByChange = (e: JSX.TargetedEvent<HTMLSelectElement, Event>) => {
+    if (e.target) {
+      const target = e.target as HTMLSelectElement;
+      setReservedBy(target.value);
     }
   }
 
@@ -32,7 +51,12 @@ export function NewScheduleModal({ onSuccess }: NewScheduleModalProps) {
       const res = await fetch(`http://localhost:8080/api/employee-schedules`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...formData, isRead: true })
+        body: JSON.stringify({ 
+          ...formData, 
+          isRead: true, 
+          username: reservedBy, // Enviamos reservedBy como username
+          reservedBy: reservedBy // Mantenemos también reservedBy para compatibilidad
+        })
       })
       if (!res.ok) throw new Error(`Error ${res.status}`)
       setOpen(false)
@@ -77,16 +101,19 @@ export function NewScheduleModal({ onSuccess }: NewScheduleModalProps) {
               </div>
             )}
             <form onSubmit={handleSubmit} class="space-y-4">
-              <div>
+            <div>
                 <label class="block mb-1">Empleado</label>
-                <input
-                  type="text"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleInput}
-                  required
-                  class="w-full border px-2 py-1 rounded"
-                />
+                <select 
+                  value={reservedBy} 
+                  onChange={handleReservedByChange}
+                  name="reservedBy"
+                  class="w-full bg-gray-100 border-none rounded-xl px-4 py-2 shadow-[inset_3px_3px_6px_#d1d9e6,inset_-2px_-2px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="">Selecciona un empleado</option>
+                  {users.map(u => (
+                    <option key={u.id} value={u.username}>{u.username}</option>
+                  ))}
+                </select>
               </div>
               <div>
                 <label class="block mb-1">Título</label>
@@ -96,7 +123,7 @@ export function NewScheduleModal({ onSuccess }: NewScheduleModalProps) {
                   value={formData.title || ""}
                   onChange={handleInput}
                   required
-                  class="w-full border px-2 py-1 rounded"
+                  class="w-full bg-gray-100 border-none rounded-xl px-4 py-2 shadow-[inset_3px_3px_6px_#d1d9e6,inset_-2px_-2px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div>
@@ -107,7 +134,7 @@ export function NewScheduleModal({ onSuccess }: NewScheduleModalProps) {
                   value={formData.startDateTime}
                   onChange={handleInput}
                   required
-                  class="w-full border px-2 py-1 rounded"
+                  class="w-full bg-gray-100 border-none rounded-xl px-4 py-2 shadow-[inset_3px_3px_6px_#d1d9e6,inset_-2px_-2px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <div>
@@ -118,9 +145,10 @@ export function NewScheduleModal({ onSuccess }: NewScheduleModalProps) {
                   value={formData.endDateTime}
                   onChange={handleInput}
                   required
-                  class="w-full border px-2 py-1 rounded"
+                  class="w-full bg-gray-100 border-none rounded-xl px-4 py-2 shadow-[inset_3px_3px_6px_#d1d9e6,inset_-2px_-2px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
+
               <div class="flex justify-end space-x-2">
                 <button
                   type="button"
@@ -133,7 +161,7 @@ export function NewScheduleModal({ onSuccess }: NewScheduleModalProps) {
                 <button
                   type="submit"
                   disabled={loading}
-                  class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 flex items-center gap-2"
+                  class="px-4 py-2 bg-navy text-white rounded hover:bg-blue-700 flex items-center gap-2"
                 >
                   {loading ? "Guardando..." : "Guardar"}
                 </button>
