@@ -40,6 +40,7 @@ export interface Schedule {
 
 export interface Reservation {
   id: string;
+  title: string;
   resourceGroup: ResourceGroup;
   startDateTime: string;
   endDateTime: string;

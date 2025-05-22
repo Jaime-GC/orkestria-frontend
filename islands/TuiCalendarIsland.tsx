@@ -93,7 +93,7 @@ export default function TuiCalendarIsland({ events, view, height = "700px" }: Tu
           ],
           template: {
             time(event) {
-              return `<div class="p-2">
+              return `<div class="p-2 ${event.isRead ? 'line-through' : ''}">
                         <div class="font-medium">${event.title}</div>
                       </div>`;
             }

@@ -32,7 +32,7 @@ export function NewScheduleModal({ onSuccess }: NewScheduleModalProps) {
       const res = await fetch(`http://localhost:8080/api/employee-schedules`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({ ...formData, isRead: true })
       })
       if (!res.ok) throw new Error(`Error ${res.status}`)
       setOpen(false)
@@ -78,7 +78,7 @@ export function NewScheduleModal({ onSuccess }: NewScheduleModalProps) {
             )}
             <form onSubmit={handleSubmit} class="space-y-4">
               <div>
-                <label class="block mb-1">Usuario</label>
+                <label class="block mb-1">Empleado</label>
                 <input
                   type="text"
                   name="username"

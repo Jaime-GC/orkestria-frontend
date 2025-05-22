@@ -1,4 +1,5 @@
 import { type PageProps } from "$fresh/server.ts";
+import NotificationSchedulerIsland from "../islands/Notifications/NotificationSchedulerIsland.tsx";
 export default function App({ Component }: PageProps) {
   return (
     <html>
@@ -10,6 +11,7 @@ export default function App({ Component }: PageProps) {
         <link rel="stylesheet" href="/calendar-custom.css" />
       </head>
       <body>
+        <NotificationSchedulerIsland />
         <Component />
       </body>
     </html>

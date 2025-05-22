@@ -1,4 +1,3 @@
-// routes/index.tsx
 import { PageProps } from "$fresh/server.ts";
 import { Head } from "$fresh/runtime.ts";
 import Sidebar from "../islands/Sidebar.tsx";

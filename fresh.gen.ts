@@ -29,6 +29,9 @@ import * as $Buttons_NewTaskModal from "./islands/Buttons/NewTaskModal.tsx";
 import * as $Buttons_NewUserModal from "./islands/Buttons/NewUserModal.tsx";
 import * as $Buttons_OptionsButton from "./islands/Buttons/OptionsButton.tsx";
 import * as $Kanban from "./islands/Kanban.tsx";
+import * as $Notifications_NotificationSchedulerIsland from "./islands/Notifications/NotificationSchedulerIsland.tsx";
+import * as $Notifications_NotificationToggle from "./islands/Notifications/NotificationToggle.tsx";
+import * as $Notifications_NotificationsClient from "./islands/Notifications/NotificationsClient.tsx";
 import * as $ProjectsList from "./islands/ProjectsList.tsx";
 import * as $ResourceInventory from "./islands/ResourceInventory.tsx";
 import * as $Sidebar from "./islands/Sidebar.tsx";
@@ -68,6 +71,12 @@ const manifest = {
     "./islands/Buttons/NewUserModal.tsx": $Buttons_NewUserModal,
     "./islands/Buttons/OptionsButton.tsx": $Buttons_OptionsButton,
     "./islands/Kanban.tsx": $Kanban,
+    "./islands/Notifications/NotificationSchedulerIsland.tsx":
+      $Notifications_NotificationSchedulerIsland,
+    "./islands/Notifications/NotificationToggle.tsx":
+      $Notifications_NotificationToggle,
+    "./islands/Notifications/NotificationsClient.tsx":
+      $Notifications_NotificationsClient,
     "./islands/ProjectsList.tsx": $ProjectsList,
     "./islands/ResourceInventory.tsx": $ResourceInventory,
     "./islands/Sidebar.tsx": $Sidebar,

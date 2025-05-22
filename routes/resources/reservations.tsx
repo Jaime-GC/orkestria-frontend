@@ -4,6 +4,8 @@ import {EditItemModal} from "../../islands/Buttons/EditItemModal.tsx";
 import {DeleteButton} from "../../islands/Buttons/DeleteButton.tsx";
 import { NewReservationModal } from "../../islands/Buttons/NewReservationModal.tsx";
 import Sidebar from "../../islands/Sidebar.tsx";
+import useNotificationScheduler from "../../hooks/useNotificationScheduler.ts";
+import NotificationToggle from "../../islands/Notifications/NotificationToggle.tsx";
 
 // Define interface for the data structure
 interface Reservation {
@@ -47,6 +49,7 @@ export const handler: Handlers<ReservationsData> = {
 };
 
 export default function Reservations({ data }: PageProps<ReservationsData>) {
+  useNotificationScheduler();
   const { reservations, error } = data;
 
   return (
@@ -56,7 +59,7 @@ export default function Reservations({ data }: PageProps<ReservationsData>) {
       </Head>
       <div class="flex h-screen bg-gray-100 font-sans">
         <Sidebar />
-        <main class="flex-1 p-8 flex flex-col overflow-hidden bg-gray-100">
+        <main class="flex-1 p-8 flex flex-col overflow-hidden">
           <div class="flex justify-between items-center mb-4">
             <h1 class="text-2xl font-bold text-navy">Reservas</h1>
             <NewReservationModal onSuccess={() => window.location.reload()} />
@@ -76,9 +79,10 @@ export default function Reservations({ data }: PageProps<ReservationsData>) {
                     <tr class="border-b border-gray-300">
                       <th class="px-4 py-3 text-left font-medium text-navy ">Título</th>
                       <th class="px-4 py-3 text-left font-medium text-navy ">Recurso</th>
+                      <th class="px-4 py-3 text-left font-medium text-navy ">Notificaciones</th>
                       <th class="px-4 py-3 text-left font-medium text-navy ">Fecha Inicio</th>
                       <th class="px-4 py-3 text-left font-medium text-navy ">Fecha Fin</th>
-                      <th class="px-4 py-3 text-left font-medium text-navy ">Reservado Por</th>
+                      <th class="px-4 py-3 text-left font-medium text-navy ">Cliente</th>
                       <th class="px-4 py-3 text-left font-medium text-navy ">Acciones</th>
                     </tr>
                   </thead>
@@ -88,6 +92,14 @@ export default function Reservations({ data }: PageProps<ReservationsData>) {
                       <tr key={reservation.id}>
                         <td class="px-4 py-4 whitespace-nowrap">{reservation.title}</td>
                         <td class="px-4 py-4 whitespace-nowrap">{reservation.resourceGroup?.name || 'N/A'}</td>
+                        <td class="px-4 py-4 whitespace-nowrap">
+                          <NotificationToggle
+                            eventId={String(reservation.id)}
+                            title={reservation.title}
+                            end={reservation.endDateTime}
+                            type="reservation"
+                          />
+                        </td>
                         <td class="px-4 py-4 whitespace-nowrap">{new Date(reservation.startDateTime).toLocaleString()}</td>
                         <td class="px-4 py-4 whitespace-nowrap">{new Date(reservation.endDateTime).toLocaleString()}</td>
                         <td class="px-4 py-4 whitespace-nowrap">{reservation.reservedBy}</td>

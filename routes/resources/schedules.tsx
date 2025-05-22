@@ -5,6 +5,8 @@ import type { Schedule } from "../../components/types.ts";
 import { NewScheduleModal } from "../../islands/Buttons/NewScheduleModal.tsx";
 import { EditItemModal } from "../../islands/Buttons/EditItemModal.tsx";
 import { DeleteButton } from "../../islands/Buttons/DeleteButton.tsx";
+import useNotificationScheduler from "../../hooks/useNotificationScheduler.ts";
+import NotificationToggle from "../../islands/Notifications/NotificationToggle.tsx";
 
 interface SchedulesData {
   schedules: Schedule[];
@@ -36,6 +38,7 @@ export const handler: Handlers<SchedulesData> = {
 };
 
 export default function Schedules({ data }: PageProps<SchedulesData>) {
+  useNotificationScheduler();
   const { schedules, error } = data;
 
   return (
@@ -71,6 +74,7 @@ export default function Schedules({ data }: PageProps<SchedulesData>) {
                   <tr class="border-b border-gray-300">
                     <th class="py-3 px-4 text-left">Usuario</th>
                     <th class="py-3 px-4 text-left">Título</th>
+                    <th class="py-3 px-4 text-left">Notificación</th>
                     <th class="py-3 px-4 text-left">Inicio</th>
                     <th class="py-3 px-4 text-left">Fin</th>
                     <th class="py-3 px-4 text-left">Acciones</th>
@@ -81,6 +85,14 @@ export default function Schedules({ data }: PageProps<SchedulesData>) {
                     <tr key={schedule.id} class="border-b border-gray-200">
                       <td class="py-3 px-4">{schedule.username}</td>
                       <td class="py-3 px-4">{schedule.title}</td>
+                      <td class="py-3 px-4">
+                        <NotificationToggle
+                          eventId={String(schedule.id)}
+                          title={schedule.title}
+                          end={schedule.endDateTime}
+                          type="employee"
+                        />
+                      </td>
                       <td class="py-3 px-4">
                         {new Date(schedule.startDateTime).toLocaleString()}
                       </td>

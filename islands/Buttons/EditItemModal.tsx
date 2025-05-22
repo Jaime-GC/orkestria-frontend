@@ -94,7 +94,7 @@ export function EditItemModal(
         <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
           <div class="bg-gray-100 rounded-2xl p-6 w-80">
             <h2 class="text-xl font-semibold text-navy mb-4">
-              Edit {resource.slice(0, -1)}
+              Editar {resource.slice(0, -1)}
             </h2>
 
             {error && (

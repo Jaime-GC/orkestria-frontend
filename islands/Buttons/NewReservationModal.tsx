@@ -15,7 +15,7 @@ export function NewReservationModal({ onSuccess }: NewReservationModalProps) {
     title: "",
     startDateTime: "",
     endDateTime: "",
-    reservedBy: "1"
+    reservedBy: ""
   });
 
   // Fetch resource groups
@@ -42,17 +42,16 @@ export function NewReservationModal({ onSuccess }: NewReservationModalProps) {
     });
   }
 
-  async function handleSubmit(e: Event) {
+  const handleSubmit = async (e: Event) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
     try {
-      // Format dates as ISO strings to ensure consistency
-      const payload = {
+           const payload = {
         ...formData,
-        startDateTime: new Date(formData.startDateTime).toISOString(),
-        endDateTime: new Date(formData.endDateTime).toISOString(),
+        startDateTime: formData.startDateTime,
+        endDateTime: formData.endDateTime
       };
       
       const response = await fetch(`http://localhost:8080/api/resource-groups/${formData.resourceGroupId}/reservations`, {
@@ -89,7 +88,7 @@ export function NewReservationModal({ onSuccess }: NewReservationModalProps) {
       title: "",
       startDateTime: "",
       endDateTime: "",
-      reservedBy: "1"
+      reservedBy: ""
     });
     setError(null);
   }
@@ -174,6 +173,18 @@ export function NewReservationModal({ onSuccess }: NewReservationModalProps) {
                   type="datetime-local"
                   name="endDateTime"
                   value={formData.endDateTime}
+                  onChange={handleInput}
+                  required
+                  class="w-full bg-gray-100 border-none rounded-xl px-4 py-2 shadow-[inset_3px_3px_6px_#d1d9e6,inset_-2px_-2px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
+                />
+              </div>
+              
+              <div>
+                <label class="block mb-1">Cliente</label>
+                <input
+                  type="text"
+                  name="reservedBy"
+                  value={formData.reservedBy || ""}
                   onChange={handleInput}
                   required
                   class="w-full bg-gray-100 border-none rounded-xl px-4 py-2 shadow-[inset_3px_3px_6px_#d1d9e6,inset_-2px_-2px_6px_#ffffff] focus:outline-none focus:ring-2 focus:ring-blue-500"
