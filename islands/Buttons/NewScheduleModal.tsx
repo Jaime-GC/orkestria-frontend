@@ -2,6 +2,7 @@ import { useState, useEffect } from "preact/hooks";
 import { JSX } from "preact";
 import type { Schedule } from "../../components/types.ts";
 import ResourceSelect from "../ResourceSelect.tsx";
+import { API } from "../../lib/api.ts";
 
 export interface NewScheduleModalProps {
   onSuccess?: () => void
@@ -22,7 +23,7 @@ export function NewScheduleModal({ onSuccess }: NewScheduleModalProps) {
 
   // Cargar los usuarios al montar el componente
   useEffect(() => {
-    fetch("http://localhost:8080/api/users")
+    fetch(`${API}/api/users`)
       .then(res => res.json())
       .then(data => setUsers(data))
       .catch(err => console.error("Error al obtener usuarios:", err));
@@ -48,7 +49,7 @@ export function NewScheduleModal({ onSuccess }: NewScheduleModalProps) {
     setLoading(true)
     setError(null)
     try {
-      const res = await fetch(`http://localhost:8080/api/employee-schedules`, {
+      const res = await fetch(`${API}/api/employee-schedules`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 

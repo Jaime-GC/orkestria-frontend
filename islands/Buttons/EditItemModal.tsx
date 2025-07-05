@@ -1,4 +1,5 @@
 import { useState } from "preact/hooks";
+import { API } from "../../lib/api.ts";
 import { EditIcon } from "../../components/Icons.tsx";
 
 interface EditItemModalProps {
@@ -28,7 +29,7 @@ export function EditItemModal(
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/${resource}/${item.id}`,
+        `${API}/api/${resource}/${item.id}`,
         {
           method: "PUT",
           headers: {
@@ -65,19 +66,63 @@ export function EditItemModal(
 
   // Determinar si un campo es de tipo select
   const isSelectField = (field: string) => {
-    return field === "role";
+    return field === "role" || field === "status" || field === "priority" || field === "type";
   };
 
-  // Renderizar las opciones para el select de role
+  // Renderizar las opciones para los campos select
   const renderOptions = (field: string) => {
     if (field === "role") {
       return (
         <>
-          <option value="EMPLOYEE">EMPLOYEE</option>
-          <option value="CLIENT">CLIENT</option>
+          <option value="EMPLOYEE">Empleado</option>
+          <option value="CLIENT">Cliente</option>
         </>
       );
     }
+    
+    if (field === "status") {
+      // Verificar si estamos editando un proyecto o una tarea basándonos en el recurso
+      if (resource === "projects") {
+        return (
+          <>
+            <option value="PLANNED">Planificado</option>
+            <option value="IN_PROGRESS">En progreso</option>
+            <option value="COMPLETE">Completado</option>
+          </>
+        );
+      } else {
+        // Estados para tareas
+        return (
+          <>
+            <option value="TODO">Por hacer</option>
+            <option value="DOING">En progreso</option>
+            <option value="BLOCKED">Bloqueada</option>
+            <option value="DONE">Hecha</option>
+          </>
+        );
+      }
+    }
+    
+    if (field === "priority") {
+      return (
+        <>
+          <option value="LOW">Baja</option>
+          <option value="MEDIUM">Media</option>
+          <option value="HIGH">Alta</option>
+        </>
+      );
+    }
+    
+    if (field === "type") {
+      return (
+        <>
+          <option value="URGENT">Urgente</option>
+          <option value="RECURRING">Recurrente</option>
+          <option value="OTHER">Otro</option>
+        </>
+      );
+    }
+    
     return null;
   };
 
@@ -91,9 +136,9 @@ export function EditItemModal(
       </button>
 
       {isOpen && (
-        <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div class="bg-gray-100 rounded-2xl p-6 w-80">
-            <h2 class="text-xl font-semibold text-navy mb-4">
+        <div class="modal-fixed">
+          <div class="modal-container">
+            <h2 class="text-left text-xl font-semibold text-navy mb-4">
               Editar {resource.slice(0, -1)}
             </h2>
 
@@ -106,25 +151,38 @@ export function EditItemModal(
             <form onSubmit={handleSubmit} class="space-y-3">
               {fields.map((field) => (
                 <div key={field} class="mb-4">
-                  <label class="block text-gray-700 mb-1">
-                    {field.charAt(0).toUpperCase() + field.slice(1)}
+                  <label class="block text-left text-navy text-sm font-medium mb-2">
+
+                    {field === "status" ? "Estado" :
+                     field === "priority" ? "Prioridad" :
+                     field === "type" ? "Tipo" :
+                     field === "username" ? "Nombre de usuario" :
+                     field === "email" ? "Email" :
+                     field === "role" ? "Rol" :
+                     field === "name" ? "Nombre" :
+                     field === "title" ? "Título" :
+                     field === "startDateTime" ? "Fecha de inicio" :
+                     field === "endDateTime" ? "Fecha de fin" :
+                     field === "resourceGroup" ? "Grupo de recursos" :
+                     field === "description" ? "Descripción" :
+                     field.charAt(0).toUpperCase() + field.slice(1)}
                   </label>
                   {isSelectField(field) ? (
                     <select
                       name={field}
                       value={formData[field] || ""}
                       onChange={handleInput}
-                      class="w-full px-3 py-2 border border-gray-300 rounded"
+                      class="w-full bg-gray-200 rounded-lg px-4 py-2 border-2 border-transparent focus:border-navy focus:outline-none shadow-[inset_3px_3px_6px_#d1d9e6,inset_-2px_-2px_6px_#ffffff]"
                     >
                       {renderOptions(field)}
                     </select>
                   ) : (
                     <input
-                      type="text"
+                      type={field === "email" ? "email" : "text"}
                       name={field}
                       value={formData[field] || ""}
                       onInput={handleInput}
-                      class="w-full px-3 py-2 border border-gray-300 rounded"
+                      class="w-full bg-gray-200 rounded-lg px-4 py-2 border-2 border-transparent focus:border-navy focus:outline-none shadow-[inset_3px_3px_6px_#d1d9e6,inset_-2px_-2px_6px_#ffffff]"
                     />
                   )}
                 </div>
@@ -134,22 +192,22 @@ export function EditItemModal(
                 <button
                   type="button"
                   onClick={() => setIsOpen(false)}
-                  class="px-4 py-2 border border-gray-300 rounded"
+                  class="bg-gray-100 rounded-xl px-4 py-2 text-navy font-medium shadow-[3px_3px_6px_#d1d9e6,-2px_-2px_6px_#ffffff] hover:shadow-[inset_3px_3px_6px_#d1d9e6,inset_-2px_-2px_6px_#ffffff] transition-all"
                   disabled={isSaving}
                 >
-                  Cancel
+                  Cancelar
                 </button>
                 <button
                   type="submit"
-                  class="px-4 py-2 bg-navy text-white rounded flex items-center"
+                  class="bg-navy rounded-xl px-4 py-2 text-white font-medium shadow-[3px_3px_6px_#d1d9e6,-2px_-2px_6px_#ffffff] hover:bg-opacity-90 transition-all flex items-center gap-2"
                   disabled={isSaving}
                 >
                   {isSaving ? (
                     <>
                       <span class="animate-spin rounded-full h-4 w-4 border-t-2 border-b-2 border-white mr-2"></span>
-                      Saving...
+                      Guardando...
                     </>
-                  ) : "Save"}
+                  ) : "Guardar"}
                 </button>
               </div>
             </form>

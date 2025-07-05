@@ -4,6 +4,7 @@ import { Task } from "../../components/types.ts";
 import Sidebar from "../../islands/Sidebar.tsx";
 import TasksList from "../../islands/TasksList.tsx";
 import { NewTaskModal } from "../../islands/Buttons/NewTaskModal.tsx";
+import { API } from "../../lib/api.ts";
 
 interface TasksPageData {
   tasks: Task[];
@@ -13,7 +14,7 @@ interface TasksPageData {
 export const handler: Handlers<TasksPageData> = {
   async GET(_, ctx) {
     try {
-      const response = await fetch("http://localhost:8080/api/tasks");
+      const response = await fetch(`${API}/api/tasks`);
 
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);

@@ -1,5 +1,6 @@
 import { useState } from "preact/hooks";
 import type { Task } from "../../components/types.ts";
+import { API } from "../../lib/api.ts";
 
 export interface NewTaskModalProps {
     projectId: string | null;
@@ -42,8 +43,8 @@ export function NewTaskModal({ projectId, onSuccess }: NewTaskModalProps) {
             console.log("Sending task data:", taskData);
             
             const url = projectId
-                ? `http://localhost:8080/api/projects/${projectId}/tasks`
-                : `http://localhost:8080/api/tasks`;
+                ? `${API}/api/projects/${projectId}/tasks`
+                : `${API}/api/tasks`;
             
             const res = await fetch(url, {
                 method: "POST",
@@ -87,8 +88,8 @@ export function NewTaskModal({ projectId, onSuccess }: NewTaskModalProps) {
             </button>
 
             {open && (
-                <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div class="bg-gray-100 rounded-xl shadow-[5px_5px_10px_#d1d9e6,-5px_-5px_10px_#ffffff] p-6 w-full max-w-md">
+                <div class="modal-fixed">
+                    <div class="modal-container">
                         <div class="flex justify-between items-center mb-4">
                             <h2 class="text-xl font-semibold text-navy">Nueva Tarea</h2>
                             <button 
@@ -146,10 +147,10 @@ export function NewTaskModal({ projectId, onSuccess }: NewTaskModalProps) {
                                     onChange={handleInput}
                                     class="w-full bg-gray-200 rounded-lg px-4 py-2 border-2 border-transparent focus:border-navy focus:outline-none shadow-[inset_3px_3px_6px_#d1d9e6,inset_-2px_-2px_6px_#ffffff]"
                                 >
-                                    <option value="TODO">To Do</option>
-                                    <option value="DOING">In Progress</option>
-                                    <option value="BLOCKED">Blocked</option>
-                                    <option value="DONE">Done</option>
+                                    <option value="TODO">Por hacer</option>
+                                    <option value="DOING">En progreso</option>
+                                    <option value="BLOCKED">Bloqueada</option>
+                                    <option value="DONE">Hecha</option>
                                 </select>
                             </div>
                             <div class="mb-4">

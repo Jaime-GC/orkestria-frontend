@@ -4,6 +4,7 @@ import Kanban from "../../islands/Kanban.tsx";
 import Sidebar from "../../islands/Sidebar.tsx";
 import { NewTaskModal } from "../../islands/Buttons/NewTaskModal.tsx";
 import type { Project, Task } from "../../components/types.ts";
+import { API } from "../../lib/api.ts";
 
 interface ProjectDetailData {
   project: Project;
@@ -16,8 +17,8 @@ export const handler: Handlers<ProjectDetailData> = {
     const { id } = ctx.params;
     try {
       const [projectResponse, tasksResponse] = await Promise.all([
-        fetch(`http://localhost:8080/api/projects/${id}`),
-        fetch(`http://localhost:8080/api/projects/${id}/tasks`)
+        fetch(`${API}/api/projects/${id}`),
+        fetch(`${API}/api/projects/${id}/tasks`)
       ]);
       
       if (!projectResponse.ok || !tasksResponse.ok) {

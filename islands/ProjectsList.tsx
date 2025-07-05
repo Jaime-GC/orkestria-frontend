@@ -3,6 +3,7 @@ import { useState, useEffect } from "preact/hooks";
 import type { Project } from "../components/types.ts";
 import { EditItemModal } from "./Buttons/EditItemModal.tsx";
 import { DeleteButton } from "./Buttons/DeleteButton.tsx";
+import { API } from "../lib/api.ts";
 
 export default function ProjectsList() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -12,7 +13,7 @@ export default function ProjectsList() {
   useEffect(() => {
     async function fetchProjects() {
       try {
-        const response = await fetch("http://localhost:8080/api/projects");
+        const response = await fetch(`${API}/api/projects`);
         console.log("Projects fetched:", response);
         
         if (!response.ok) {
@@ -55,12 +56,48 @@ export default function ProjectsList() {
             <h3 class="text-xl font-bold text-navy mb-2">{project.name}</h3>
             {project.description && (
               <p class="text-gray-600 mb-4">{project.description}</p>
-            )}</a>
+            )}
+            
+            {/* Mostrar el estado del proyecto si está disponible */}
+            {project.status && (
+              <div class="flex items-center mb-2">
+                <span class="text-sm font-medium mr-2">Estado:</span>
+                <span 
+                  class={`text-sm px-2 py-1 rounded-md ${
+                    project.status === 'PLANNED' ? 'bg-blue-100 text-blue-800' :
+                    project.status === 'IN_PROGRESS' ? 'bg-yellow-100 text-yellow-800' :
+                    project.status === 'COMPLETE' ? 'bg-green-100 text-green-800' :
+                    'bg-gray-100 text-gray-800'
+                  }`}
+                >
+                  {project.status === 'PLANNED' ? 'Planificado' :
+                   project.status === 'IN_PROGRESS' ? 'En progreso' :
+                   project.status === 'COMPLETE' ? 'Completado' :
+                   project.status}
+                </span>
+              </div>
+            )}
+            
+            {/* Mostrar la fecha de inicio si está disponible */}
+            {project.startDate && (
+              <div class="flex items-center mb-3">
+                <span class="text-sm font-medium mr-2">Fecha de inicio:</span>
+                <span class="text-sm text-gray-600">
+                  {new Date(project.startDate).toLocaleDateString('es-ES', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                  })}
+                </span>
+              </div>
+            )}
+            </a>
+            
             <div class="flex justify-end items-center mt-4 space-x-2">
               <EditItemModal
                 resource="projects"
                 item={project}
-                fields={["name", "description"]}
+                fields={["name", "description", "startDate", "status"]}
                 onSuccess={() => window.location.reload()}
               />
               <DeleteButton

@@ -1,5 +1,6 @@
 import { type PageProps } from "$fresh/server.ts";
 import NotificationSchedulerIsland from "../islands/Notifications/NotificationSchedulerIsland.tsx";
+
 export default function App({ Component }: PageProps) {
   return (
     <html>
@@ -9,6 +10,19 @@ export default function App({ Component }: PageProps) {
         <title>Orkestria</title>
         <link rel="stylesheet" href="/styles.css" />
         <link rel="stylesheet" href="/calendar-custom.css" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // en el navegador decidimos apuntar al host local
+              window.API_URL = (() => {
+                const h = location.hostname;
+                return (h === "localhost" || h === "127.0.0.1")
+                  ? "http://localhost:8080"
+                  : "http://backend:8080";
+              })();
+            `
+          }}
+        />
       </head>
       <body>
         <NotificationSchedulerIsland />

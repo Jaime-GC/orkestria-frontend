@@ -35,7 +35,7 @@ export default function CreateNodeModal({parentNode, isOpen, onClose, onSave, is
             onSave({ name }, parentNode?.id);
             onClose();
         } catch (err) {
-            console.error("Error creating node:", err);
+            console.error("Error creando el nodo:", err);
             setError(err instanceof Error ? err.message : "No se pudo crear.");
         } finally {
             setLoading(false);
@@ -45,9 +45,9 @@ export default function CreateNodeModal({parentNode, isOpen, onClose, onSave, is
     // Determine the modal title based on whether it's a group or item and if it has a parent
     let modalTitle = "";
     if (parentNode) {
-        modalTitle = `Create ${isResourceGroup ? 'group' : 'item'} in "${parentNode.name}"`;
+        modalTitle = `Crear ${isResourceGroup ? 'grupo' : 'item'} en "${parentNode.name}"`;
     } else {
-        modalTitle = `Create ${isResourceGroup ? 'root group' : 'root item'}`;
+        modalTitle = `Crear ${isResourceGroup ? 'grupo raíz' : 'item raíz'}`;
     }
 
     return (
@@ -63,14 +63,14 @@ export default function CreateNodeModal({parentNode, isOpen, onClose, onSave, is
                 <form onSubmit={handleSubmit} class="space-y-4">
                     <div>
                         {/* Input field for the node name */}
-                        <label class="block text-sm text-navy mb-1">Name</label>
+                        <label class="block text-sm text-navy mb-1">Nombre</label>
                         <input
                             type="text"
                             value={name}
                             onInput={(e) => setName((e.target as HTMLInputElement).value)} // Update name state on input
                             required
                             class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring"
-                            placeholder="Resource name"
+                            placeholder="Nombre del recurso"
                         />
                     </div>
                     
@@ -83,7 +83,7 @@ export default function CreateNodeModal({parentNode, isOpen, onClose, onSave, is
                             class="px-4 py-2 rounded-lg bg-gray-200 text-navy hover:bg-gray-300 transition"
                             disabled={loading}
                         >
-                            Cancel
+                            Cancelar
                         </button>
                         
                         {/* Submit button */}

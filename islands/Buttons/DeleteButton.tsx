@@ -1,4 +1,5 @@
 import { useState } from "preact/hooks";
+import { API } from "../../lib/api.ts";
 import { DeleteIcon } from "../../components/Icons.tsx";
 
 interface DeleteButtonProps {
@@ -17,7 +18,7 @@ export function DeleteButton({ resource, id, onSuccess }: DeleteButtonProps) {
     setError(null);
 
     try {
-      const response = await fetch(`http://localhost:8080/api/${resource}/${id}`, {
+      const response = await fetch(`${API}/api/${resource}/${id}`, {
         method: "DELETE",
       });
 
@@ -52,12 +53,12 @@ export function DeleteButton({ resource, id, onSuccess }: DeleteButtonProps) {
       </button>
 
       {isModalOpen && (
-        <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div class="bg-gray-100 rounded-2xl p-6 max-w-md w-full">
-            <h2 class="text-xl font-semibold text-navy mb-4">
+        <div class="modal-fixed">
+          <div class="modal-container">
+            <h2 class="text-left text-xl font-semibold text-navy mb-4">
               Confirmar eliminación
             </h2>
-            <p class="mb-6 break-words whitespace-normal">
+            <p class="text-left mb-6 break-words whitespace-normal">
               ¿Está seguro de que desea eliminar este elemento?
             </p>
 

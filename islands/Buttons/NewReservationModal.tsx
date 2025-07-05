@@ -1,5 +1,6 @@
 import { h } from "preact";
 import { useState, useEffect } from "preact/hooks";
+import { API } from "../../lib/api.ts";
 
 export function NewReservationModal({ onCreate }: { onCreate: (data: any) => void }) {
   const [open, setOpen] = useState(false);
@@ -19,7 +20,7 @@ export function NewReservationModal({ onCreate }: { onCreate: (data: any) => voi
   // Fetch resource groups
   useEffect(() => {
     if (open) {
-      fetch("http://localhost:8080/api/resource-groups")
+      fetch(`${API}/api/resource-groups`)
         .then(response => response.json())
         .then(data => {
           console.log("Resource groups fetched:", data); // Add this logging
@@ -34,7 +35,7 @@ export function NewReservationModal({ onCreate }: { onCreate: (data: any) => voi
 
   // Cargar los usuarios al montar el componente
   useEffect(() => {
-    fetch("http://localhost:8080/api/users")
+    fetch(`${API}/api/users`)
       .then(res => res.json())
       .then(data => setUsers(data))
       .catch(err => console.error("Error al obtener usuarios:", err));
@@ -61,7 +62,7 @@ export function NewReservationModal({ onCreate }: { onCreate: (data: any) => voi
         reservedBy: formData.reservedBy ? formData.reservedBy : null,
       };
       
-      const response = await fetch(`http://localhost:8080/api/resource-groups/${formData.resourceGroupId}/reservations`, {
+      const response = await fetch(`${API}/api/resource-groups/${formData.resourceGroupId}/reservations`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"

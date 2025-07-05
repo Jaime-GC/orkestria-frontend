@@ -4,6 +4,7 @@ import Sidebar from "../../islands/Sidebar.tsx";
 import TuiCalendarIsland, { TuiEvent } from "../../islands/TuiCalendarIsland.tsx";
 import type { Reservation } from "../../components/types.ts";
 import { NewReservationModal } from "../../islands/Buttons/NewReservationModal.tsx";
+import { API } from "../../lib/api.ts";
 
 interface ReservationsCalendarData {
   events: TuiEvent[];
@@ -13,7 +14,7 @@ interface ReservationsCalendarData {
 export const handler: Handlers<ReservationsCalendarData> = {
   async GET(req, ctx) {
     try {
-      const response = await fetch("http://localhost:8080/api/reservations");
+      const response = await fetch(`${API}/api/reservations`);
       
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);

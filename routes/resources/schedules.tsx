@@ -7,6 +7,7 @@ import { EditItemModal } from "../../islands/Buttons/EditItemModal.tsx";
 import { DeleteButton } from "../../islands/Buttons/DeleteButton.tsx";
 import useNotificationScheduler from "../../hooks/useNotificationScheduler.ts";
 import NotificationToggle from "../../islands/Notifications/NotificationToggle.tsx";
+import { API } from "../../lib/api.ts";
 
 interface SchedulesData {
   schedules: Schedule[];
@@ -16,7 +17,7 @@ interface SchedulesData {
 export const handler: Handlers<SchedulesData> = {
   async GET(req, ctx) {
     try {
-      const response = await fetch("http://localhost:8080/api/employee-schedules");
+      const response = await fetch(`${API}/api/employee-schedules`);
 
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);

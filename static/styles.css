@@ -35,3 +35,28 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   background-color: #b3bfcc;
 }
+
+/* Modal fijo centrado */
+.modal-fixed {
+  position: fixed !important;
+  top: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  z-index: 99999 !important;
+  background-color: rgba(0, 0, 0, 0.5) !important;
+  padding: 1rem !important;
+}
+
+.modal-container {
+  width: 100% !important;
+  max-width: 28rem !important;
+  margin: 0 auto !important;
+  border-radius: 1rem !important;
+  background-color: #f3f4f6 !important;
+  padding: 1.5rem !important;
+  box-shadow: 5px 5px 10px #d1d9e6, -5px -5px 10px #ffffff !important;
+}

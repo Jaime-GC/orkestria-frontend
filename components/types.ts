@@ -3,7 +3,7 @@ export interface Project {
   name: string;
   description?: string;
   startDate?: string;
-  status?: string;
+  status?: 'PLANNED' | 'IN_PROGRESS' | 'COMPLETE';
 }
 
 export interface Task {

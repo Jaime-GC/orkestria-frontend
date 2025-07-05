@@ -2,6 +2,7 @@ import { useState, useEffect } from "preact/hooks";
 import { BoxTree, BoxNode } from "./BoxTree.tsx";
 import CreateNodeModal from "./Buttons/CreateNodeModal.tsx";
 import OptionsButton from "./Buttons/OptionsButton.tsx";
+import { API } from "../lib/api.ts";
 
 export default function ResourceInventory({ initialItems }: { initialItems: BoxNode[] }) {
   const [tree, setTree] = useState<BoxNode[]>([]);
@@ -43,7 +44,7 @@ export default function ResourceInventory({ initialItems }: { initialItems: BoxN
     
     try {
       // Llamada a la API para crear un grupo de recursos
-      const response = await fetch("http://localhost:8080/api/resource-groups", {
+      const response = await fetch(`${API}/api/resource-groups`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -86,7 +87,7 @@ export default function ResourceInventory({ initialItems }: { initialItems: BoxN
       const isGroup = updatedNode.type === 'group';
       const resourceType = isGroup ? 'resource-groups' : 'resource-items';
       
-      const response = await fetch(`http://localhost:8080/api/resource-groups/${updatedNode.id}`, {
+      const response = await fetch(`${API}/api/resource-groups/${updatedNode.id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"
@@ -128,7 +129,7 @@ export default function ResourceInventory({ initialItems }: { initialItems: BoxN
   // Borrar nodo
   const handleNodeDeleted = async (id: number) => {
     try {
-      const res = await fetch(`http://localhost:8080/api/resource-groups/${id}`, { method: "DELETE" });
+      const res = await fetch(`${API}/api/resource-groups/${id}`, { method: "DELETE" });
       console.log("Delete response:", res.status);
       if (!res.ok) throw new Error(`Error ${res.status}`);
       const remove = (nodes: BoxNode[]): BoxNode[] =>
@@ -147,7 +148,7 @@ export default function ResourceInventory({ initialItems }: { initialItems: BoxN
     parentId: number
   ) => {
     try {
-      const res = await fetch("http://localhost:8080/api/resource-groups", {
+      const res = await fetch(`${API}/api/resource-groups`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: newNodePayload.name, parentId })

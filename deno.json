@@ -30,6 +30,7 @@
     "tailwindcss": "npm:tailwindcss@3.4.1",
     "tailwindcss/": "npm:/tailwindcss@3.4.1/",
     "tailwindcss/plugin": "npm:/tailwindcss@3.4.1/plugin.js",
+    "@alloc/quick-lru": "npm:@alloc/quick-lru@5.2.0",
     "$std/": "https://deno.land/std@0.216.0/",
     "axios": "https://esm.sh/axios@1.5.0"
   },
@@ -37,5 +38,5 @@
     "jsx": "react-jsx",
     "jsxImportSource": "preact"
   },
-  "nodeModulesDir": "auto"
+  "nodeModulesDir": true
 }

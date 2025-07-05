@@ -1,0 +1,8 @@
+# Ignore everything in the .git directory
+.git
+# Ignore Deno cache
+.deno
+# Ignore node_modules if it exists
+node_modules
+# Ignore log files and temporary files
+*.log

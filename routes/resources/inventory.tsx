@@ -4,6 +4,7 @@ import Sidebar from "../../islands/Sidebar.tsx";
 import ResourceInventory from "../../islands/ResourceInventory.tsx";
 import { NewGroupButton } from "../../islands/Buttons/NewGroupButton.tsx";
 import type { ResourceGroup } from "../../components/types.ts";
+import { API } from "../../lib/api.ts";
 
 interface InventoryData {
   groups: ResourceGroup[];
@@ -13,7 +14,7 @@ interface InventoryData {
 export const handler: Handlers<InventoryData> = {
   async GET(_, ctx) {
     try {
-      const response = await fetch("http://localhost:8080/api/resource-groups");
+      const response = await fetch(`${API}/api/resource-groups`);
       
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);

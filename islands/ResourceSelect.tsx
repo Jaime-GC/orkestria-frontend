@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "preact/hooks";
+import { API } from "../lib/api.ts";
 
 interface User {
   id: number;
@@ -16,7 +17,7 @@ export default function ResourceSelect({ selected, onSelect }: ResourceSelectPro
   const [users, setUsers] = useState<User[]>([]);
   useEffect(() => {
     // Reemplazar esta URL con la ruta correcta o sustituir por datos estáticos si se desea.
-    fetch("http://localhost:8080/api/users")
+    fetch(`${API}/api/users`)
       .then(res => res.json())
       .then(data => setUsers(data))
       .catch(err => console.error("Error al obtener usuarios:", err));

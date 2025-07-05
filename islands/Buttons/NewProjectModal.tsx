@@ -1,4 +1,5 @@
 import { useState } from "preact/hooks";
+import { API } from "../../lib/api.ts";
 import type { Project } from "../../components/types.ts";
 
 export interface NewProjectModalProps {
@@ -25,7 +26,7 @@ export function NewProjectModal({ onSuccess }: NewProjectModalProps) {
         setError(null);
 
         try {
-            const response = await fetch('http://localhost:8080/api/projects', {
+            const response = await fetch(`${API}/api/projects`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -69,8 +70,8 @@ export function NewProjectModal({ onSuccess }: NewProjectModalProps) {
             </button>
 
             {open && (
-                <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div class="bg-gray-100 rounded-xl shadow-[5px_5px_10px_#d1d9e6,-5px_-5px_10px_#ffffff] p-6 w-full max-w-md">
+                <div class="modal-fixed">
+                    <div class="modal-container">
                         <div class="flex justify-between items-center mb-4">
                             <h2 class="text-xl font-semibold text-navy">Nuevo Proyecto</h2>
                             <button 

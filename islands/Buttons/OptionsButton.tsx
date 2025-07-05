@@ -94,7 +94,7 @@ export default function OptionsButton({
                   setIsCreateModalOpen(true);
                 }}
               >
-                Añadir hijo
+                Añadir subgrupo
               </button>
             )}
             

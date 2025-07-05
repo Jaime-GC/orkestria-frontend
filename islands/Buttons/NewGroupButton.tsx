@@ -1,4 +1,5 @@
 import { useState } from "preact/hooks";
+import { API } from "../../lib/api.ts";
 import type { ResourceGroup } from "../../components/types.ts";
 
 interface NewGroupButtonProps {
@@ -25,7 +26,8 @@ export function NewGroupButton({ onSuccess }: NewGroupButtonProps) {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:8080/api/resource-groups', {
+       console.log(">>> SSR Tasks – API_URL =", API);
+      const response = await fetch(`${API}/api/resource-groups`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

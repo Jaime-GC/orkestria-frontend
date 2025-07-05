@@ -1,5 +1,6 @@
 import { useState, useEffect } from "preact/hooks";
 import { BoxNode } from "../BoxTree.tsx";
+import { API } from "../../lib/api.ts";
 
 interface EditNodeModalProps {
   node: BoxNode;
@@ -36,7 +37,7 @@ export default function EditNodeModal({ node, isOpen, onClose, onSave }: EditNod
       const endpoint = isGroup
         ? "/api/resource-groups"
         : "/api/resource-items";
-      const url = `http://localhost:8080/api/resource-groups/${node.id}`;
+      const url = `${API}/api/resource-groups/${node.id}`;
       const payload = {
         name,
         parentId: node.parentId,

@@ -3,14 +3,15 @@ import { useState } from "preact/hooks";
 import type { Task } from "../components/types.ts";
 import { EditItemModal } from "./Buttons/EditItemModal.tsx";
 import { DeleteButton } from "./Buttons/DeleteButton.tsx";
+import { API } from "../lib/api.ts";
 
 export default function Kanban({ tasks, project }: { tasks: Task[], project: { id: number } }) {
-  // Arreglar tipo de estado
-  const [cols, setCols] = useState<Record<string, Task>>({
-    "To Do": tasks.filter(t => t.status === "TODO"),
-    "In Progress": tasks.filter(t => t.status === "DOING"),
-    "Blocked": tasks.filter(t => t.status === "BLOCKED"),
-    "Done": tasks.filter(t => t.status === "DONE"),
+  // Corregir tipo de estado
+  const [cols, setCols] = useState<Record<string, Task[]>>({
+    "Por hacer": tasks.filter(t => t.status === "TODO"),
+    "En progreso": tasks.filter(t => t.status === "DOING"),
+    "Bloqueadas": tasks.filter(t => t.status === "BLOCKED"),
+    "Hechas": tasks.filter(t => t.status === "DONE"),
   });
 
   function onDragStart(e: DragEvent, task: Task, from: string) {
@@ -24,7 +25,7 @@ export default function Kanban({ tasks, project }: { tasks: Task[], project: { i
       console.log("Enviando payload completo:", payload);
 
       const response = await fetch(
-        `http://localhost:8080/api/projects/${project.id}/tasks/${task.id}`,
+        `${API}/api/projects/${project.id}/tasks/${task.id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
@@ -52,10 +53,10 @@ export default function Kanban({ tasks, project }: { tasks: Task[], project: { i
       if (from === to) return;
       
       let newStatus: "TODO" | "DOING" | "BLOCKED" | "DONE" = "TODO";
-      if (to === "To Do") newStatus = "TODO";
-      else if (to === "In Progress") newStatus = "DOING";
-      else if (to === "Blocked") newStatus = "BLOCKED";
-      else if (to === "Done") newStatus = "DONE";
+      if (to === "Por hacer") newStatus = "TODO";
+      else if (to === "En progreso") newStatus = "DOING";
+      else if (to === "Bloqueadas") newStatus = "BLOCKED";
+      else if (to === "Hechas") newStatus = "DONE";
       
       setCols(prev => {
         const src = [...prev[from]].filter((t: Task) => t.id !== task.id);
@@ -93,16 +94,39 @@ export default function Kanban({ tasks, project }: { tasks: Task[], project: { i
                 key={item.id}
                 draggable
                 onDragStart={e => onDragStart(e, item, col)}
-                class="bg-gray-100 rounded-xl p-2 shadow-[3px_3px_6px_#d1d9e6,-2px_-2px_6px_#ffffff]
+                class="bg-gray-100 rounded-xl p-3 shadow-[3px_3px_6px_#d1d9e6,-2px_-2px_6px_#ffffff]
                        transition-all hover:shadow-[inset_3px_3px_6px_#d1d9e6,inset_-2px_-2px_6px_#ffffff]
                        cursor-move"
               >
-                <div>{item.title}</div>
-                <div class="flex justify-end space-x-2 mt-2">
+                <div class="font-medium text-navy mb-2">{item.title}</div>
+                {item.description && (
+                  <div class="text-sm text-gray-600 mb-2">{item.description}</div>
+                )}
+                <div class="flex justify-between items-center mb-2">
+                  <div class="flex space-x-2">
+                    <span class={`px-2 py-1 rounded-full text-xs font-medium ${
+                      item.priority === "HIGH" ? "bg-red-500 text-white" :
+                      item.priority === "MEDIUM" ? "bg-yellow-400 text-black" :
+                      "bg-green-500 text-white"
+                    }`}>
+                      {item.priority === "HIGH" ? "Alta" :
+                       item.priority === "MEDIUM" ? "Media" : "Baja"}
+                    </span>
+                    <span class={`px-2 py-1 rounded-full text-xs font-medium ${
+                      item.type === "URGENT" ? "bg-red-200 text-red-800" :
+                      item.type === "RECURRING" ? "bg-blue-200 text-blue-800" :
+                      "bg-gray-200 text-gray-800"
+                    }`}>
+                      {item.type === "URGENT" ? "Urgente" :
+                       item.type === "RECURRING" ? "Recurrente" : "Otro"}
+                    </span>
+                  </div>
+                </div>
+                <div class="flex justify-end space-x-2">
                   <EditItemModal
                     resource={`projects/${project.id}/tasks`}
                     item={item}
-                    fields={["title"]}
+                    fields={["title", "description", "status", "priority", "type"]}
                     onSuccess={() => window.location.reload()}
                   />
                   <DeleteButton

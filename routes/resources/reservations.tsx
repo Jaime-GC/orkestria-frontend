@@ -6,6 +6,7 @@ import { NewReservationModal } from "../../islands/Buttons/NewReservationModal.t
 import Sidebar from "../../islands/Sidebar.tsx";
 import useNotificationScheduler from "../../hooks/useNotificationScheduler.ts";
 import NotificationToggle from "../../islands/Notifications/NotificationToggle.tsx";
+import { API } from "../../lib/api.ts";
 
 // Define interface for the data structure
 interface Reservation {
@@ -30,7 +31,7 @@ interface ReservationsData {
 export const handler: Handlers<ReservationsData> = {
   async GET(_, ctx) {
     try {
-      const response = await fetch("http://localhost:8080/api/reservations");
+      const response = await fetch(`${API}/api/reservations`);
       
       if (!response.ok) {
         throw new Error(`Error ${response.status}: ${response.statusText}`);
