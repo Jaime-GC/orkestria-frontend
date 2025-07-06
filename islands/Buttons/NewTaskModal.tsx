@@ -1,5 +1,5 @@
-import { useState } from "preact/hooks";
-import type { Task } from "../../components/types.ts";
+import { useState, useEffect } from "preact/hooks";
+import type { Task, User } from "../../components/types.ts";
 import { API } from "../../lib/api.ts";
 
 export interface NewTaskModalProps {
@@ -15,10 +15,31 @@ export function NewTaskModal({ projectId, onSuccess }: NewTaskModalProps) {
         status: "TODO",
         priority: "MEDIUM",
         type: "OTHER",
-        projectId: projectId ?? undefined
+        projectId: projectId ?? undefined,
+        userId: ""
     });
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
+    const [users, setUsers] = useState<User[]>([]);
+
+    // Cargar usuarios cuando se abre el modal
+    useEffect(() => {
+        if (open) {
+            fetchUsers();
+        }
+    }, [open]);
+
+    const fetchUsers = async () => {
+        try {
+            const response = await fetch(`${API}/api/users`);
+            if (response.ok) {
+                const usersData = await response.json();
+                setUsers(usersData);
+            }
+        } catch (err) {
+            console.error("Error fetching users:", err);
+        }
+    };
 
     const handleInput = (e: Event) => {
         const target = e.target as HTMLInputElement | HTMLSelectElement;
@@ -39,6 +60,16 @@ export function NewTaskModal({ projectId, onSuccess }: NewTaskModalProps) {
                 taskData.projectId = projectId;
             }
             
+            // Transformar userId a assignedUser si se seleccionó un usuario
+            if (taskData.userId && taskData.userId !== "") {
+                taskData.assignedUser = {
+                    id: parseInt(taskData.userId)
+                };
+            }
+            
+            // Eliminar userId del body (no es parte de la estructura esperada)
+            delete taskData.userId;
+            
             // Log para depuración
             console.log("Sending task data:", taskData);
             
@@ -56,8 +87,23 @@ export function NewTaskModal({ projectId, onSuccess }: NewTaskModalProps) {
                 throw new Error(`Error ${res.status}: ${res.statusText}`);
             }
             
+            // Obtener la tarea creada
+            const created = await res.json();
+            console.log("Backend response after creating task:", created);
+            
             setOpen(false);
-            setFormData({ title: "", description: "", status: "TODO" });
+            setFormData({ 
+                title: "", 
+                description: "", 
+                status: "TODO", 
+                priority: "MEDIUM", 
+                type: "OTHER", 
+                projectId: projectId ?? undefined,
+                userId: ""
+            });
+            
+            // Esperar un poco para asegurar que el backend procesó la creación
+            await new Promise(resolve => setTimeout(resolve, 200));
             
             // Recargar la página automáticamente después de crear la tarea
             if (onSuccess) {
@@ -183,6 +229,25 @@ export function NewTaskModal({ projectId, onSuccess }: NewTaskModalProps) {
                                     <option value="URGENT">Urgente</option>
                                     <option value="RECURRING">Recurrente</option>
                                     <option value="OTHER">Otro</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-navy text-sm font-medium mb-2" for="userId">
+                                    Usuario asignado
+                                </label>
+                                <select
+                                    id="userId"
+                                    name="userId"
+                                    value={formData.userId || ""}
+                                    onChange={handleInput}
+                                    class="w-full bg-gray-200 rounded-lg px-4 py-2 border-2 border-transparent focus:border-navy focus:outline-none shadow-[inset_3px_3px_6px_#d1d9e6,inset_-2px_-2px_6px_#ffffff]"
+                                >
+                                    <option value="">Sin asignar</option>
+                                    {users.map(user => (
+                                        <option key={user.id} value={user.id}>
+                                            {user.username}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                             <div class="flex justify-end space-x-2">

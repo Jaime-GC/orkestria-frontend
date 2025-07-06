@@ -14,6 +14,7 @@ export interface Task {
     type: 'URGENT' | 'RECURRING' | 'OTHER';
     status: 'TODO' | 'DOING' | 'BLOCKED' | 'DONE';
     projectId: string;
+    assignedUser?: User;
 }
 
 export interface User {

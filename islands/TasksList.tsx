@@ -49,7 +49,7 @@ export default function TasksList({ initialTasks = [], projectId }: TasksListPro
       <EditItemModal 
         resource="tasks" 
         item={task} 
-        fields={["title", "description", "status", "priority", "type"]} 
+        fields={["title", "description", "status", "priority", "type", "userId"]} 
         onSuccess={fetchTasks}
       />
     );
@@ -87,6 +87,17 @@ export default function TasksList({ initialTasks = [], projectId }: TasksListPro
                 {task.description && (
                   <p class="text-gray-600 mb-3">{task.description}</p>
                 )}
+                
+                {/* Mostrar usuario asignado */}
+                <div class="mb-3">
+                  <span class="text-sm font-medium text-gray-700">Asignado a: </span>
+                  <span class={`text-sm px-2 py-1 rounded-md ${
+                    task.assignedUser || task.user ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-600'
+                  }`}>
+                    {task.assignedUser?.username || task.user?.username || 'Sin asignar'}
+                  </span>
+                </div>
+                
                 <div class="flex flex-wrap gap-2">
                   <span class={`px-2 py-1 rounded-full text-xs font-medium ${
                     task.status === "TODO" ? "bg-blue-200 text-blue-800" :

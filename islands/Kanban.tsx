@@ -1,4 +1,3 @@
-import { h } from "preact";
 import { useState } from "preact/hooks";
 import type { Task } from "../components/types.ts";
 import { EditItemModal } from "./Buttons/EditItemModal.tsx";
@@ -13,6 +12,27 @@ export default function Kanban({ tasks, project }: { tasks: Task[], project: { i
     "Bloqueadas": tasks.filter(t => t.status === "BLOCKED"),
     "Hechas": tasks.filter(t => t.status === "DONE"),
   });
+
+  // Función para refrescar las tareas del proyecto
+  const refreshTasks = async () => {
+    try {
+      const response = await fetch(`${API}/api/projects/${project.id}/tasks`);
+      if (response.ok) {
+        const updatedTasks = await response.json();
+        // Actualizar las columnas con las tareas actualizadas
+        setCols({
+          "Por hacer": updatedTasks.filter((t: Task) => t.status === "TODO"),
+          "En progreso": updatedTasks.filter((t: Task) => t.status === "DOING"),
+          "Bloqueadas": updatedTasks.filter((t: Task) => t.status === "BLOCKED"),
+          "Hechas": updatedTasks.filter((t: Task) => t.status === "DONE"),
+        });
+      }
+    } catch (error) {
+      console.error("Error refreshing tasks:", error);
+      // Fallback: recargar la página si falla el refresh
+      window.location.reload();
+    }
+  };
 
   function onDragStart(e: DragEvent, task: Task, from: string) {
     e.dataTransfer?.setData("task", JSON.stringify({ task, from }));
@@ -102,6 +122,17 @@ export default function Kanban({ tasks, project }: { tasks: Task[], project: { i
                 {item.description && (
                   <div class="text-sm text-gray-600 mb-2">{item.description}</div>
                 )}
+                
+                {/* Mostrar usuario asignado */}
+                <div class="mb-2">
+                  <span class="text-xs text-gray-500">Asignado a: </span>
+                  <span class={`text-xs px-2 py-1 rounded-md ${
+                    item.assignedUser || item.user ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-600'
+                  }`}>
+                    {item.assignedUser?.username || item.user?.username || 'Sin asignar'}
+                  </span>
+                </div>
+                
                 <div class="flex justify-between items-center mb-2">
                   <div class="flex space-x-2">
                     <span class={`px-2 py-1 rounded-full text-xs font-medium ${
@@ -124,15 +155,15 @@ export default function Kanban({ tasks, project }: { tasks: Task[], project: { i
                 </div>
                 <div class="flex justify-end space-x-2">
                   <EditItemModal
-                    resource={`projects/${project.id}/tasks`}
+                    resource="tasks"
                     item={item}
-                    fields={["title", "description", "status", "priority", "type"]}
-                    onSuccess={() => window.location.reload()}
+                    fields={["title", "description", "status", "priority", "type", "userId"]}
+                    onSuccess={refreshTasks}
                   />
                   <DeleteButton
-                    resource={`projects/${project.id}/tasks`}
+                    resource="tasks"
                     id={item.id}
-                    onSuccess={() => window.location.reload()}
+                    onSuccess={refreshTasks}
                   />
                 </div>
               </div>

@@ -6,12 +6,13 @@ Welcome to **Orkestria**, a modern and elegant platform designed to help you man
 
 ## 🌟 Features
 
-- **Neumorphic Design**: A visually appealing and modern UI with a consistent neumorphic style.
+- **Neumorphic Design**: A modern and visually appealing interface with a consistent neumorphic style.
 - **Kanban Board**: Drag-and-drop functionality to manage tasks across different statuses.
 - **Dynamic Sidebar**: A responsive and interactive sidebar for seamless navigation.
-- **CRUD Operations**: Create, edit, and delete users, projects, categories, and more.
-- **Data Visualization**: Interactive charts and reports for tracking income, expenses, and other metrics.
-- **Custom Scrollbars**: Aesthetic and functional scrollbars for a better user experience.
+- **CRUD Operations**: Create, edit, and delete users, projects, tasks, and more.
+- **Resource Management**: Administration of inventory, schedules, and resource reservations.
+- **User Assignment**: Flexibly assign and unassign users to tasks.
+- **Notifications**: Integrated notification system for events and reminders.
 
 ---
 
@@ -20,7 +21,6 @@ Welcome to **Orkestria**, a modern and elegant platform designed to help you man
 ### Prerequisites
 
 - **Deno**: Install Deno by following the [official guide](https://deno.land/manual/getting_started/installation).
-- **Node.js** (optional): For managing frontend dependencies like Tailwind CSS.
 
 ### Installation
 
@@ -30,17 +30,12 @@ Welcome to **Orkestria**, a modern and elegant platform designed to help you man
    cd orkestria-frontend
    ```
 
-2. Install dependencies:
+2. Start the development server:
    ```bash
    deno task start
    ```
 
-3. Start the development server:
-   ```bash
-   deno task start
-   ```
-
-4. Open your browser and navigate to:
+3. Open your browser and navigate to:
    ```
    http://localhost:8000
    ```
@@ -51,10 +46,12 @@ Welcome to **Orkestria**, a modern and elegant platform designed to help you man
 
 ```
 orkestria-frontend/
-├── components/       # Reusable UI components (e.g., buttons, cards, icons)
+├── components/       # Reusable UI components (buttons, cards, icons)
 ├── islands/          # Interactive components with client-side interactivity
 ├── routes/           # Application routes (pages)
-├── static/           # Static assets (e.g., styles, images)
+├── static/           # Static assets (styles, images)
+├── hooks/            # Custom Preact hooks
+├── lib/              # Utilities and API configuration
 ├── tailwind.config.ts # Tailwind CSS configuration
 ├── dev.ts            # Development server entry point
 ├── main.ts           # Application entry point
@@ -67,31 +64,37 @@ orkestria-frontend/
 
 - **Color Palette**:
   - Primary: `#001f3f` (Navy Blue)
-  - Secondary: Shades of gray for backgrounds and accents.
+  - Secondary: Gray tones for backgrounds and accents.
 - **Typography**:
-  - Font: [Inter](https://fonts.google.com/specimen/Inter) for a clean and modern look.
+  - Font: System default for a clean and modern appearance.
 - **Neumorphism**:
-  - Shadows and highlights to create a soft, 3D-like interface.
+  - Shadows and highlights to create a soft 3D-like interface.
 
 ---
 
 ## 📂 Key Features by Route
 
 ### `/`
-- Welcome page with a gradient animation and a footer.
+- Welcome page with main navigation.
 
 ### `/projects`
 - List of projects with neumorphic cards.
-- Hover effects for interactivity.
+- Detailed project view with integrated Kanban board.
+
+### `/tasks`
+- Complete task management with user assignment.
+- List view with filters and editing options.
 
 ### `/users`
-- User management with modals for creating, editing, and deleting users.
+- User management with modals for creating, editing, and deleting.
 
-### `/reports`
-- Interactive charts for visualizing income and expenses.
+### `/resources`
+- **Inventory**: Management of resources organized in groups.
+- **Schedules**: Programming of events and activities.
+- **Reservations**: Reservation system with integrated calendar.
 
-### `/kanban`
-- Drag-and-drop Kanban board for task management.
+### `/notifications`
+- Notification center for events and reminders.
 
 ---
 
@@ -116,21 +119,9 @@ orkestria-frontend/
 
 ---
 
-## 📸 Screenshots
-
-### Dashboard
-![Dashboard Screenshot](https://via.placeholder.com/800x400?text=Dashboard+Screenshot)
-
-### Kanban Board
-![Kanban Screenshot](https://via.placeholder.com/800x400?text=Kanban+Screenshot)
-
----
-
 ## 🌐 Links
 
-- **Live Demo**: [Orkestria](https://orkestria.example.com)
 - **Backend Repository**: [Orkestria Backend](https://github.com/Jaime-GC/orkestria-backend)
-- **Documentation**: [Orkestria Docs](https://orkestria-docs.example.com)
 
 ---
 

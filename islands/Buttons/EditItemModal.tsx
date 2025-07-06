@@ -1,6 +1,7 @@
-import { useState } from "preact/hooks";
+import { useState, useEffect } from "preact/hooks";
 import { API } from "../../lib/api.ts";
 import { EditIcon } from "../../components/Icons.tsx";
+import type { User } from "../../components/types.ts";
 
 interface EditItemModalProps {
   resource: string;
@@ -13,9 +14,53 @@ export function EditItemModal(
   { resource, item, fields, onSuccess }: EditItemModalProps,
 ) {
   const [isOpen, setIsOpen] = useState(false);
-  const [formData, setFormData] = useState<Record<string, any>>({ ...item });
+  
+  // Inicializar formData con los datos del item y manejar assignedUser
+  const initFormData = () => {
+    const data = { ...item };
+    // Si es una tarea y tiene assignedUser, convertirlo a userId para el formulario
+    if (resource === "tasks" && item.assignedUser) {
+      data.userId = item.assignedUser.id.toString();
+      console.log("Initialized userId from assignedUser:", data.userId);
+    } else if (resource === "tasks" && item.user) {
+      // Fallback para compatibilidad
+      data.userId = item.user.id.toString();
+      console.log("Initialized userId from user:", data.userId);
+    }
+    console.log("EditItemModal initialized with data:", data);
+    return data;
+  };
+  
+  const [formData, setFormData] = useState<Record<string, any>>(initFormData());
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
+  const [users, setUsers] = useState<User[]>([]);
+
+  // Reinicializar formData cuando el modal se abre con un item diferente
+  useEffect(() => {
+    if (isOpen) {
+      setFormData(initFormData());
+    }
+  }, [isOpen, item]);
+
+  // Cargar usuarios cuando se abre el modal y contiene el campo userId
+  useEffect(() => {
+    if (isOpen && fields.includes("userId")) {
+      fetchUsers();
+    }
+  }, [isOpen, fields]);
+
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch(`${API}/api/users`);
+      if (response.ok) {
+        const usersData = await response.json();
+        setUsers(usersData);
+      }
+    } catch (err) {
+      console.error("Error fetching users:", err);
+    }
+  };
 
   const handleInput = (e: Event) => {
     const target = e.target as HTMLInputElement | HTMLSelectElement;
@@ -28,6 +73,26 @@ export function EditItemModal(
     setError(null);
 
     try {
+      // Preparar datos para el PUT
+      const updateData = { ...formData };
+      
+      // Si es una tarea, manejar la asignación de usuario
+      if (resource === "tasks") {
+        if (updateData.userId && updateData.userId !== "") {
+          // Asignar usuario
+          updateData.assignedUser = {
+            id: parseInt(updateData.userId)
+          };
+        } else {
+          // Desasignar usuario explícitamente
+          updateData.assignedUser = null;
+        }
+        // Eliminar userId del body (no es parte de la estructura esperada)
+        delete updateData.userId;
+      }
+
+      console.log("Sending update data:", updateData);
+
       const response = await fetch(
         `${API}/api/${resource}/${item.id}`,
         {
@@ -35,7 +100,7 @@ export function EditItemModal(
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(formData),
+          body: JSON.stringify(updateData),
         },
       );
 
@@ -43,7 +108,14 @@ export function EditItemModal(
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
 
+      // Log para depuración
+      const result = await response.json();
+      console.log("Backend response after editing:", result);
+
       setIsOpen(false);
+      
+      // Esperar un poco para asegurar que el backend procesó la actualización
+      await new Promise(resolve => setTimeout(resolve, 200));
       
       // Aseguramos que el callback onSuccess se ejecuta después de la operación exitosa
       setTimeout(() => {
@@ -66,7 +138,7 @@ export function EditItemModal(
 
   // Determinar si un campo es de tipo select
   const isSelectField = (field: string) => {
-    return field === "role" || field === "status" || field === "priority" || field === "type";
+    return field === "role" || field === "status" || field === "priority" || field === "type" || field === "userId";
   };
 
   // Renderizar las opciones para los campos select
@@ -123,6 +195,19 @@ export function EditItemModal(
       );
     }
     
+    if (field === "userId") {
+      return (
+        <>
+          <option value="">Sin asignar</option>
+          {users.map(user => (
+            <option key={user.id} value={user.id}>
+              {user.username}
+            </option>
+          ))}
+        </>
+      );
+    }
+    
     return null;
   };
 
@@ -165,6 +250,8 @@ export function EditItemModal(
                      field === "endDateTime" ? "Fecha de fin" :
                      field === "resourceGroup" ? "Grupo de recursos" :
                      field === "description" ? "Descripción" :
+                     field === "userId" ? "Usuario asignado" :
+                     field === "startDate" ? "Fecha de inicio" :
                      field.charAt(0).toUpperCase() + field.slice(1)}
                   </label>
                   {isSelectField(field) ? (
