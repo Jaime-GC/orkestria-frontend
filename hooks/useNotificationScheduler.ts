@@ -4,7 +4,7 @@ export default function useNotificationScheduler() {
   const timers = useRef<number[]>([]);
 
   const scheduleAll = () => {
-    // DEBUG: mostrar en consola qué notificaciones están guardadas
+    // DEBUG: show in console which notifications are stored
     const notifKeys = Object.keys(localStorage).filter(k => k.startsWith("notif:event:"));
     console.log("🔍 localStorage entries for notifications:", 
       notifKeys.map(k => ({ key: k, value: JSON.parse(localStorage.getItem(k)!) }))
@@ -20,7 +20,7 @@ export default function useNotificationScheduler() {
           const delay = new Date(end).getTime() - Date.now();
           if (Notification.permission === "granted" && delay > 0) {
             const id = window.setTimeout(
-              () => new Notification(title, { body: `Finalizó a ${new Date(end).toLocaleTimeString()}` }),
+              () => new Notification(title, { body: `Ended at ${new Date(end).toLocaleTimeString()}` }),
               delay,
             );
             timers.current.push(id);

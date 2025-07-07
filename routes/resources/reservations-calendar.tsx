@@ -58,7 +58,7 @@ export default function ReservationsCalendarPage({ data }: PageProps<Reservation
         <Sidebar />
         <main class="flex-1 p-8 overflow-auto">
           <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-navy">Calendario de Reservas</h1>
+            <h1 class="text-2xl font-bold text-navy">Calendario de reservas de clientes</h1>
             <div class="flex space-x-2">
               <NewReservationModal onSuccess={() => window.location.reload()} />
             </div>

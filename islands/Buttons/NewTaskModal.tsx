@@ -1,6 +1,5 @@
-import { useState, useEffect } from "preact/hooks";
-import type { Task, User } from "../../components/types.ts";
-import { API } from "../../lib/api.ts";
+import { useState } from "preact/hooks";
+import type { Task } from "../../components/types.ts";
 
 export interface NewTaskModalProps {
     projectId: string | null;
@@ -15,31 +14,10 @@ export function NewTaskModal({ projectId, onSuccess }: NewTaskModalProps) {
         status: "TODO",
         priority: "MEDIUM",
         type: "OTHER",
-        projectId: projectId ?? undefined,
-        userId: ""
+        projectId: projectId ?? undefined
     });
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
-    const [users, setUsers] = useState<User[]>([]);
-
-    // Cargar usuarios cuando se abre el modal
-    useEffect(() => {
-        if (open) {
-            fetchUsers();
-        }
-    }, [open]);
-
-    const fetchUsers = async () => {
-        try {
-            const response = await fetch(`${API}/api/users`);
-            if (response.ok) {
-                const usersData = await response.json();
-                setUsers(usersData);
-            }
-        } catch (err) {
-            console.error("Error fetching users:", err);
-        }
-    };
 
     const handleInput = (e: Event) => {
         const target = e.target as HTMLInputElement | HTMLSelectElement;
@@ -52,30 +30,20 @@ export function NewTaskModal({ projectId, onSuccess }: NewTaskModalProps) {
         setError(null);
         
         try {
-            // Crear objeto de datos limpio para enviar
+            // Create clean data object to send
             const taskData = { ...formData };
             
-            // Solo incluir projectId si tiene valor
+            // Only include projectId if it has value
             if (projectId) {
                 taskData.projectId = projectId;
             }
             
-            // Transformar userId a assignedUser si se seleccionó un usuario
-            if (taskData.userId && taskData.userId !== "") {
-                taskData.assignedUser = {
-                    id: parseInt(taskData.userId)
-                };
-            }
-            
-            // Eliminar userId del body (no es parte de la estructura esperada)
-            delete taskData.userId;
-            
-            // Log para depuración
+            // Log for debugging
             console.log("Sending task data:", taskData);
             
             const url = projectId
-                ? `${API}/api/projects/${projectId}/tasks`
-                : `${API}/api/tasks`;
+                ? `http://localhost:8080/api/projects/${projectId}/tasks`
+                : `http://localhost:8080/api/tasks`;
             
             const res = await fetch(url, {
                 method: "POST",
@@ -87,35 +55,20 @@ export function NewTaskModal({ projectId, onSuccess }: NewTaskModalProps) {
                 throw new Error(`Error ${res.status}: ${res.statusText}`);
             }
             
-            // Obtener la tarea creada
-            const created = await res.json();
-            console.log("Backend response after creating task:", created);
-            
             setOpen(false);
-            setFormData({ 
-                title: "", 
-                description: "", 
-                status: "TODO", 
-                priority: "MEDIUM", 
-                type: "OTHER", 
-                projectId: projectId ?? undefined,
-                userId: ""
-            });
+            setFormData({ title: "", description: "", status: "TODO" });
             
-            // Esperar un poco para asegurar que el backend procesó la creación
-            await new Promise(resolve => setTimeout(resolve, 200));
-            
-            // Recargar la página automáticamente después de crear la tarea
+            // Automatically reload page after creating task
             if (onSuccess) {
                 onSuccess();
             } else {
                 setTimeout(() => {
                     window.location.reload();
-                }, 100); // Pequeño retraso para asegurar que el modal se cierra correctamente
+                }, 100); // Small delay to ensure modal closes properly
             }
         } catch (err) {
             console.error("Error creating task:", err);
-            setError(`Error al crear la tarea: ${err.message || "Error desconocido"}`);
+            setError(`Error creating task: ${err.message || "Unknown error"}`);
         } finally {
             setLoading(false);
         }
@@ -134,8 +87,8 @@ export function NewTaskModal({ projectId, onSuccess }: NewTaskModalProps) {
             </button>
 
             {open && (
-                <div class="modal-fixed">
-                    <div class="modal-container">
+                <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div class="bg-gray-100 rounded-xl shadow-[5px_5px_10px_#d1d9e6,-5px_-5px_10px_#ffffff] p-6 w-full max-w-md">
                         <div class="flex justify-between items-center mb-4">
                             <h2 class="text-xl font-semibold text-navy">Nueva Tarea</h2>
                             <button 
@@ -193,10 +146,10 @@ export function NewTaskModal({ projectId, onSuccess }: NewTaskModalProps) {
                                     onChange={handleInput}
                                     class="w-full bg-gray-200 rounded-lg px-4 py-2 border-2 border-transparent focus:border-navy focus:outline-none shadow-[inset_3px_3px_6px_#d1d9e6,inset_-2px_-2px_6px_#ffffff]"
                                 >
-                                    <option value="TODO">Por hacer</option>
-                                    <option value="DOING">En progreso</option>
-                                    <option value="BLOCKED">Bloqueada</option>
-                                    <option value="DONE">Hecha</option>
+                                    <option value="TODO">To Do</option>
+                                    <option value="DOING">In Progress</option>
+                                    <option value="BLOCKED">Blocked</option>
+                                    <option value="DONE">Done</option>
                                 </select>
                             </div>
                             <div class="mb-4">
@@ -229,25 +182,6 @@ export function NewTaskModal({ projectId, onSuccess }: NewTaskModalProps) {
                                     <option value="URGENT">Urgente</option>
                                     <option value="RECURRING">Recurrente</option>
                                     <option value="OTHER">Otro</option>
-                                </select>
-                            </div>
-                            <div class="mb-4">
-                                <label class="block text-navy text-sm font-medium mb-2" for="userId">
-                                    Usuario asignado
-                                </label>
-                                <select
-                                    id="userId"
-                                    name="userId"
-                                    value={formData.userId || ""}
-                                    onChange={handleInput}
-                                    class="w-full bg-gray-200 rounded-lg px-4 py-2 border-2 border-transparent focus:border-navy focus:outline-none shadow-[inset_3px_3px_6px_#d1d9e6,inset_-2px_-2px_6px_#ffffff]"
-                                >
-                                    <option value="">Sin asignar</option>
-                                    {users.map(user => (
-                                        <option key={user.id} value={user.id}>
-                                            {user.username}
-                                        </option>
-                                    ))}
                                 </select>
                             </div>
                             <div class="flex justify-end space-x-2">

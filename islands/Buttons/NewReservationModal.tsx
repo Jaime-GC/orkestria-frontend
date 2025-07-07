@@ -33,12 +33,12 @@ export function NewReservationModal({ onCreate }: { onCreate: (data: any) => voi
     }
   }, [open]);
 
-  // Cargar los usuarios al montar el componente
+  // Load users when component mounts
   useEffect(() => {
     fetch(`${API}/api/users`)
       .then(res => res.json())
       .then(data => setUsers(data))
-      .catch(err => console.error("Error al obtener usuarios:", err));
+      .catch(err => console.error("Error getting users:", err));
   }, []);
 
   function handleInput(e: Event) {

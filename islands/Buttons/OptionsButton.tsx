@@ -29,9 +29,9 @@ export default function OptionsButton({
     if (onNodeUpdated) {
       onNodeUpdated(updatedNode);
     } else {
-      console.log('Guardando cambios:', updatedNode);
+      console.log('Saving changes:', updatedNode);
       alert(`Cambios guardados para el elemento ${updatedNode.id} (simulado)`);
-      // Forzamos recarga si no hay callback
+      // Force reload if no callback
       window.location.reload();
     }
   };
@@ -41,9 +41,9 @@ export default function OptionsButton({
     if (onNodeDeleted) {
       onNodeDeleted(node.id);
     } else {
-      console.log(`Eliminando elemento con ID: ${node.id}`);
+      console.log(`Deleting element with ID: ${node.id}`);
       alert(`Elemento ${node.id} eliminado (simulado)`);
-      // Forzamos recarga si no hay callback
+      // Force reload if no callback
       window.location.reload();
     }
   };
@@ -53,9 +53,9 @@ export default function OptionsButton({
     if (onNodeCreated) {
       onNodeCreated(newNode, node.id);
     } else {
-      console.log('Creando nuevo nodo hijo:', newNode);
+      console.log('Creating new child node:', newNode);
       alert(`Nuevo nodo creado como hijo de ${node.id} (simulado)`);
-      // Forzamos recarga si no hay callback
+      // Force reload if no callback
       window.location.reload();
     }
   };

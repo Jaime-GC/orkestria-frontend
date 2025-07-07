@@ -31,7 +31,7 @@ export const handler: Handlers<{ users: User[]; error?: string }> = {
 export default function Users({ data }: PageProps<{ users: User[]; error?: string }>) {
   const { users, error } = data;
   
-  // Función de recarga forzada para asegurar actualización completa
+  // Forced reload function to ensure complete update
   const forceRefresh = () => {
     window.location.reload();
   };

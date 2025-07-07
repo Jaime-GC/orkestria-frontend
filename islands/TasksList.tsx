@@ -88,7 +88,7 @@ export default function TasksList({ initialTasks = [], projectId }: TasksListPro
                   <p class="text-gray-600 mb-3">{task.description}</p>
                 )}
                 
-                {/* Mostrar usuario asignado */}
+                {/* Show assigned user */}
                 <div class="mb-3">
                   <span class="text-sm font-medium text-gray-700">Asignado a: </span>
                   <span class={`text-sm px-2 py-1 rounded-md ${

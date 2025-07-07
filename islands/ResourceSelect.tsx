@@ -5,7 +5,7 @@ import { API } from "../lib/api.ts";
 interface User {
   id: number;
   username: string;
-  // ...otros campos...
+  // ...other fields...
 }
 
 interface ResourceSelectProps {
@@ -16,11 +16,11 @@ interface ResourceSelectProps {
 export default function ResourceSelect({ selected, onSelect }: ResourceSelectProps) {
   const [users, setUsers] = useState<User[]>([]);
   useEffect(() => {
-    // Reemplazar esta URL con la ruta correcta o sustituir por datos estáticos si se desea.
+   
     fetch(`${API}/api/users`)
       .then(res => res.json())
       .then(data => setUsers(data))
-      .catch(err => console.error("Error al obtener usuarios:", err));
+      .catch(err => console.error("Error getting users:", err));
   }, []);
   return (
     <select value={selected} onChange={(e) => onSelect(e.currentTarget.value)}>

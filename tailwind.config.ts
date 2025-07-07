@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        navy: "#001f3f", // Define el color azul marino
+        navy: "#001f3f", // Define navy blue color
       },
     },
   },

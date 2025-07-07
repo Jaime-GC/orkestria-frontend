@@ -15,15 +15,15 @@ export function EditItemModal(
 ) {
   const [isOpen, setIsOpen] = useState(false);
   
-  // Inicializar formData con los datos del item y manejar assignedUser
+  // Initialize formData with item data and handle assignedUser
   const initFormData = () => {
     const data = { ...item };
-    // Si es una tarea y tiene assignedUser, convertirlo a userId para el formulario
+    // If it's a task and has assignedUser, convert it to userId for the form
     if (resource === "tasks" && item.assignedUser) {
       data.userId = item.assignedUser.id.toString();
       console.log("Initialized userId from assignedUser:", data.userId);
     } else if (resource === "tasks" && item.user) {
-      // Fallback para compatibilidad
+      // Fallback for compatibility
       data.userId = item.user.id.toString();
       console.log("Initialized userId from user:", data.userId);
     }
@@ -36,14 +36,14 @@ export function EditItemModal(
   const [isSaving, setIsSaving] = useState(false);
   const [users, setUsers] = useState<User[]>([]);
 
-  // Reinicializar formData cuando el modal se abre con un item diferente
+  // Reinitialize formData when modal opens with a different item
   useEffect(() => {
     if (isOpen) {
       setFormData(initFormData());
     }
   }, [isOpen, item]);
 
-  // Cargar usuarios cuando se abre el modal y contiene el campo userId
+  // Load users when modal opens and contains userId field
   useEffect(() => {
     if (isOpen && fields.includes("userId")) {
       fetchUsers();
@@ -73,21 +73,21 @@ export function EditItemModal(
     setError(null);
 
     try {
-      // Preparar datos para el PUT
+      // Prepare data for PUT request
       const updateData = { ...formData };
       
-      // Si es una tarea, manejar la asignación de usuario
+      // If it's a task, handle user assignment
       if (resource === "tasks") {
         if (updateData.userId && updateData.userId !== "") {
-          // Asignar usuario
+          // Assign user
           updateData.assignedUser = {
             id: parseInt(updateData.userId)
           };
         } else {
-          // Desasignar usuario explícitamente
+          // Explicitly unassign user
           updateData.assignedUser = null;
         }
-        // Eliminar userId del body (no es parte de la estructura esperada)
+        // Remove userId from body (not part of expected structure)
         delete updateData.userId;
       }
 
@@ -108,21 +108,21 @@ export function EditItemModal(
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
 
-      // Log para depuración
+      // Log for debugging
       const result = await response.json();
       console.log("Backend response after editing:", result);
 
       setIsOpen(false);
       
-      // Esperar un poco para asegurar que el backend procesó la actualización
+      // Wait a bit to ensure backend processed the update
       await new Promise(resolve => setTimeout(resolve, 200));
       
-      // Aseguramos que el callback onSuccess se ejecuta después de la operación exitosa
+      // Ensure onSuccess callback executes after successful operation
       setTimeout(() => {
         if (onSuccess) {
           onSuccess();
         } else {
-          window.location.reload(); // Fallback si no hay callback
+          window.location.reload(); // Fallback if no callback
         }
       }, 100);
       
@@ -136,12 +136,12 @@ export function EditItemModal(
     }
   };
 
-  // Determinar si un campo es de tipo select
+  // Determine if a field is of select type
   const isSelectField = (field: string) => {
     return field === "role" || field === "status" || field === "priority" || field === "type" || field === "userId";
   };
 
-  // Renderizar las opciones para los campos select
+  // Render options for select fields
   const renderOptions = (field: string) => {
     if (field === "role") {
       return (
@@ -153,7 +153,7 @@ export function EditItemModal(
     }
     
     if (field === "status") {
-      // Verificar si estamos editando un proyecto o una tarea basándonos en el recurso
+      // Check if we're editing a project or task based on resource
       if (resource === "projects") {
         return (
           <>
@@ -163,7 +163,7 @@ export function EditItemModal(
           </>
         );
       } else {
-        // Estados para tareas
+        // Task statuses
         return (
           <>
             <option value="TODO">Por hacer</option>

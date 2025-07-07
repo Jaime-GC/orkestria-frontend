@@ -6,7 +6,7 @@ export interface BoxNode {
   id: string;
   name: string;
   children?: BoxNode[];
-  type?: 'group' | 'item'; // Opcional: distinguir entre grupos (pueden tener hijos) e ítems
+  type?: 'group' | 'item'; // Optional: distinguish between groups (can have children) and items
 }
 
 interface BoxTreeProps {

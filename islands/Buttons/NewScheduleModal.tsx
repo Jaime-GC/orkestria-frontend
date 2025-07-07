@@ -21,12 +21,12 @@ export function NewScheduleModal({ onSuccess }: NewScheduleModalProps) {
   const [reservedBy, setReservedBy] = useState("");
   const [users, setUsers] = useState<any[]>([]);
 
-  // Cargar los usuarios al montar el componente
+  // Load users when component mounts
   useEffect(() => {
     fetch(`${API}/api/users`)
       .then(res => res.json())
       .then(data => setUsers(data))
-      .catch(err => console.error("Error al obtener usuarios:", err));
+      .catch(err => console.error("Error getting users:", err));
   }, []);
 
   const handleInput = (e: JSX.TargetedEvent<HTMLInputElement, Event>) => {
@@ -36,7 +36,7 @@ export function NewScheduleModal({ onSuccess }: NewScheduleModalProps) {
     }
   }
 
-  // Añadir un manejador específico para el cambio del select de empleado
+  // Add specific handler for employee select change
   const handleReservedByChange = (e: JSX.TargetedEvent<HTMLSelectElement, Event>) => {
     if (e.target) {
       const target = e.target as HTMLSelectElement;
@@ -55,8 +55,8 @@ export function NewScheduleModal({ onSuccess }: NewScheduleModalProps) {
         body: JSON.stringify({ 
           ...formData, 
           isRead: true, 
-          username: reservedBy, // Enviamos reservedBy como username
-          reservedBy: reservedBy // Mantenemos también reservedBy para compatibilidad
+          username: reservedBy, // Send reservedBy as username
+          reservedBy: reservedBy // Also keep reservedBy for compatibility
         })
       })
       if (!res.ok) throw new Error(`Error ${res.status}`)

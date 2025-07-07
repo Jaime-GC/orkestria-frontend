@@ -46,7 +46,7 @@ export function NewProjectModal({ onSuccess }: NewProjectModalProps) {
             if (onSuccess) {
                 onSuccess();
             } else {
-                // Fallback: recarga la página
+                // Fallback: reload page
                 window.location.reload();
             }
         } catch (err) {

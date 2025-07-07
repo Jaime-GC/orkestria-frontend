@@ -32,7 +32,7 @@ export function DeleteButton({ resource, id, onSuccess }: DeleteButtonProps) {
         if (onSuccess) {
           onSuccess();
         } else {
-          window.location.reload(); // Fallback si no hay callback
+          window.location.reload(); // Fallback if no callback
         }
       }, 100);
     } catch (err) {

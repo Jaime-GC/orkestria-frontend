@@ -1,6 +1,9 @@
 import { useState, useEffect } from "preact/hooks";
 import { BoxTree, BoxNode } from "./BoxTree.tsx";
-import CreateNodeModal from "./Buttons/CreateNodeModal.tsx";
+import CreateNodeM    } catch (err) {
+      console.error('Error updating node:', err);
+      setError("No se pudo actualizar el nodo");
+    } finally { from "./Buttons/CreateNodeModal.tsx";
 import OptionsButton from "./Buttons/OptionsButton.tsx";
 import { API } from "../lib/api.ts";
 
@@ -10,19 +13,19 @@ export default function ResourceInventory({ initialItems }: { initialItems: BoxN
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   
-  // Construir jerarquía
+  // Build hierarchy
   useEffect(() => {
     const map = new Map<number, BoxNode>();
     initialItems.forEach(n => map.set(n.id, n));
     
-    // Inicializa children a array vacío en cada nodo para que no acumule duplicados
+    // Initialize children to empty array in each node so it doesn't accumulate duplicates
     map.forEach(node => {
       node.children = [];
     });
 
     const roots: BoxNode[] = [];
 
-    // Monta el árbol usando parentId o parent?.id
+    // Build tree using parentId or parent?.id
     map.forEach(n => {
       const pid: number | undefined = n.parentId ?? (n as any).parent?.id;
       if (!pid) {
@@ -37,13 +40,13 @@ export default function ResourceInventory({ initialItems }: { initialItems: BoxN
     setTree(roots);
   }, [initialItems]);
 
-  // Handler para crear un nuevo nodo raíz
+  // Handler to create a new root node
   const handleCreateRootNode = async (newNode: Omit<BoxNode, "id">) => {
     setIsLoading(true);
     setError("");
     
     try {
-      // Llamada a la API para crear un grupo de recursos
+      // API call to create a resource group
       const response = await fetch(`${API}/api/resource-groups`, {
         method: "POST",
         headers: {
@@ -70,20 +73,20 @@ export default function ResourceInventory({ initialItems }: { initialItems: BoxN
       setTree(prev => [...prev, nodeWithId]);
       setIsCreateModalOpen(false);
     } catch (err) {
-      console.error('Error al crear grupo:', err);
+      console.error('Error creating group:', err);
       setError("No se pudo crear el grupo de recursos");
     } finally {
       setIsLoading(false);
     }
   };
   
-  // Handler para actualizar un nodo existente
+  // Handler to update an existing node
   const handleNodeUpdated = async (updatedNode: BoxNode) => {
     setIsLoading(true);
     setError("");
     
     try {
-      // Determinar si es un grupo o un ítem basado en el tipo
+      // Determine if it's a group or item based on type
       const isGroup = updatedNode.type === 'group';
       const resourceType = isGroup ? 'resource-groups' : 'resource-items';
       
@@ -101,7 +104,7 @@ export default function ResourceInventory({ initialItems }: { initialItems: BoxN
         throw new Error(`Error ${response.status}: ${response.statusText}`);
       }
       
-      // Actualizar el estado local
+      // Update local state
       const updateNodeInTree = (nodes: BoxNode[]): BoxNode[] => {
         return nodes.map(node => {
           if (node.id === updatedNode.id) {
@@ -119,14 +122,14 @@ export default function ResourceInventory({ initialItems }: { initialItems: BoxN
       
       setTree(updateNodeInTree(tree));
     } catch (err) {
-      console.error('Error al actualizar nodo:', err);
+      console.error('Error updating node:', err);
       setError("No se pudo actualizar el recurso");
     } finally {
       setIsLoading(false);
     }
   };
   
-  // Borrar nodo
+  // Delete node
   const handleNodeDeleted = async (id: number) => {
     try {
       const res = await fetch(`${API}/api/resource-groups/${id}`, { method: "DELETE" });
@@ -142,7 +145,7 @@ export default function ResourceInventory({ initialItems }: { initialItems: BoxN
     }
   };
   
-  // Crear hijo siempre en resource-groups
+  // Create child always in resource-groups
   const handleNodeCreated = async (
     newNodePayload: Omit<BoxNode, "id" | "children">,
     parentId: number
@@ -169,7 +172,7 @@ export default function ResourceInventory({ initialItems }: { initialItems: BoxN
     }
   };
 
-  // Editar nodo localmente
+  // Edit node locally
   const handleNodeEdited = (updated: BoxNode) => {
     const update = (nodes: BoxNode[]): BoxNode[] =>
       nodes.map(n =>
@@ -201,7 +204,7 @@ export default function ResourceInventory({ initialItems }: { initialItems: BoxN
         </div>
       )}
       
-      {/* Modal para crear nodo raíz */}
+      {/* Modal to create root node */}
       <CreateNodeModal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}

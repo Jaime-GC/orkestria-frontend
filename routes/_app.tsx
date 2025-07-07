@@ -13,7 +13,7 @@ export default function App({ Component }: PageProps) {
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              // en el navegador decidimos apuntar al host local
+              // in browser we decide to point to localhost
               window.API_URL = (() => {
                 const h = location.hostname;
                 return (h === "localhost" || h === "127.0.0.1")

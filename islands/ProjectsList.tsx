@@ -58,7 +58,7 @@ export default function ProjectsList() {
               <p class="text-gray-600 mb-4">{project.description}</p>
             )}
             
-            {/* Mostrar el estado del proyecto si está disponible */}
+            {/* Show project status if available */}
             {project.status && (
               <div class="flex items-center mb-2">
                 <span class="text-sm font-medium mr-2">Estado:</span>
@@ -78,7 +78,7 @@ export default function ProjectsList() {
               </div>
             )}
             
-            {/* Mostrar la fecha de inicio si está disponible */}
+            {/* Show start date if available */}
             {project.startDate && (
               <div class="flex items-center mb-3">
                 <span class="text-sm font-medium mr-2">Fecha de inicio:</span>

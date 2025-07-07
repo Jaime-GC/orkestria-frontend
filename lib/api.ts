@@ -1,6 +1,6 @@
 // lib/api.ts
 export const API = typeof window === "undefined"
-  // en SSR: usa localhost para desarrollo local, backend para Docker
+  // in SSR: use localhost for local development, backend for Docker
   ? Deno.env.get("API_URL") ?? "http://localhost:8080"
-  // en cliente: el script que inyectamos asigna window.API_URL
+  // in client: the script we inject assigns window.API_URL
   : (window as { API_URL?: string }).API_URL ?? "http://localhost:8080";

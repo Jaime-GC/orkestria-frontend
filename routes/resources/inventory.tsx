@@ -43,7 +43,7 @@ export default function InventoryPage({ data }: PageProps<InventoryData>) {
       <div class="flex h-screen bg-gray-100 font-sans">
         <Sidebar />
         <main class="flex-1 p-8 overflow-auto">
-          {/* Encabezado con título y botón */}
+          {/* Header with title and button */}
           <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-navy">Inventario</h1>
             <div class="flex items-center">

@@ -16,7 +16,7 @@
   }
 }
 
-/* Scrollbar personalizado */
+/* Custom scrollbar */
 .custom-scrollbar::-webkit-scrollbar {
   width: 8px;
 }
@@ -36,7 +36,7 @@
   background-color: #b3bfcc;
 }
 
-/* Modal fijo centrado */
+/* Fixed centered modal */
 .modal-fixed {
   position: fixed !important;
   top: 0 !important;

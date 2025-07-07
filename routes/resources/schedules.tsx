@@ -45,14 +45,14 @@ export default function Schedules({ data }: PageProps<SchedulesData>) {
   return (
     <>
       <Head>
-        <title>Orkestria - Horarios</title>
+        <title>Orkestria - Eventos</title>
       </Head>
       <div class="flex h-screen font-sans bg-gray-100">
         <Sidebar />
         <main class="flex-1 p-8 overflow-auto">
-          {/* Encabezado con título y botones */}
+          {/* Header with title and buttons */}
           <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-navy">Horarios de Empleados</h1>
+            <h1 class="text-2xl font-bold text-navy">Eventos de Empleados</h1>
             <div class="flex space-x-2">
               <NewScheduleModal onSuccess={() => window.location.reload()} />
             </div>

@@ -45,12 +45,12 @@ export function NewGroupButton({ onSuccess }: NewGroupButtonProps) {
         parentId: undefined
       });
       
-      // Aseguramos que el callback onSuccess se ejecuta después de la operación exitosa
+      // Ensure onSuccess callback executes after successful operation
       setTimeout(() => {
         if (onSuccess) {
           onSuccess();
         } else {
-          window.location.reload(); // Fallback si no hay callback
+          window.location.reload(); // Fallback if no callback
         }
       }, 100);
       

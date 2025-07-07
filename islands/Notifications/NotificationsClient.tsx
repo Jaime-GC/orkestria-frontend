@@ -4,7 +4,7 @@ import { useEffect, useState } from "preact/hooks";
 interface NotificationEvent {
   title: string;
   end: string;
-  // ...otros campos si es necesario...
+  // ...other fields if needed...
 }
 
 export default function NotificationsClient() {
@@ -18,12 +18,12 @@ export default function NotificationsClient() {
     keys.forEach((key) => {
       try {
         const data: NotificationEvent = JSON.parse(localStorage.getItem(key)!);
-        // Solo incluir la notificación si aún no ha expirado
+        // Only include notification if it hasn't expired yet
         if (new Date(data.end).getTime() > Date.now()) {
           notifs.push(data);
         }
       } catch {
-        // Ignorar errores de parseo
+        // Ignore parsing errors
       }
     });
     setPending(notifs);
