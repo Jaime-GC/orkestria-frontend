@@ -1,9 +1,6 @@
 import { useState, useEffect } from "preact/hooks";
 import { BoxTree, BoxNode } from "./BoxTree.tsx";
-import CreateNodeM    } catch (err) {
-      console.error('Error updating node:', err);
-      setError("No se pudo actualizar el nodo");
-    } finally { from "./Buttons/CreateNodeModal.tsx";
+import CreateNodeModal from "./Buttons/CreateNodeModal.tsx";
 import OptionsButton from "./Buttons/OptionsButton.tsx";
 import { API } from "../lib/api.ts";
 
@@ -122,7 +119,7 @@ export default function ResourceInventory({ initialItems }: { initialItems: BoxN
       
       setTree(updateNodeInTree(tree));
     } catch (err) {
-      console.error('Error updating node:', err);
+      console.error('Error al actualizar nodo:', err);
       setError("No se pudo actualizar el recurso");
     } finally {
       setIsLoading(false);
